@@ -25,7 +25,8 @@ for i in $(seq 1 $SPRINTS); do
     echo ">>> Sprint $i/$SPRINTS — $(date) <<<"
     echo ""
     
-    claude -p "Follow the instructions in TASK.md." \
+    claude -p "ultrathink. Follow the instructions in TASK.md." \
+        --model claude-opus-4-8 \
         --dangerously-skip-permissions \
         --verbose \
         --max-turns 30 \

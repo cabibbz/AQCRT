@@ -1,5 +1,7 @@
 {
   "enabledPlugins": {
     "ralph-wiggum@claude-code-plugins": true
-  }
+  },
+  "model": "claude-opus-4-8",
+  "effortLevel": "max"
 }
