@@ -68,6 +68,21 @@ q=3 has none ⇒ converges to 7/5. At L<=11 (ln N x1.73) the data CANNOT disting
 from "2 with marginal logs"; open-BC DMRG even drifts UP toward 2. The S_q values below are
 finite-size **effective** exponents, NOT asymptotes.
 
+### ✔ q=4 reframing HARDENED (Sprint 130) — independent ν + marginal-log signature
+Two calibrated, g_c-assumption-free observables from the full χ_F(g,N) curve (calibration on q=2→1/ν=1
+and q=3→1/ν=1.2, no marginal op):
+- **Data collapse (location scaling, marginal-log-insensitive):** 1/ν(q=4)=1.45 raw → **1.49 after the
+  q=2,3 calibration (×0.973) ⇒ ν=2/3 confirmed from our own data.** Excludes 1/ν≤1.2. This confirms the
+  literature input the Sprint-129 reframing relied on.
+- **Amplitude (self-locating peak-HEIGHT) exponent:** recovers 2/ν−d to ≤1.3% at q=2,3 (method unbiased)
+  but a(q=4)=1.75 = **12.7% below 2.0** ⇒ the deficit is *physical*, the marginal log. Albuquerque
+  residual 2κ−1−a is ~0 at q=2,3 but **+0.14 at q=4** — the marginal operator made visible.
+- Given ν=2/3 (confirmed) + Albuquerque (a proven identity), the amplitude exponent **must →2** asympt.;
+  measured ~1.77–1.81 is finite-size. **Peak-SHIFT exponent is unusable for ν** (gives 1.8/2.3/2.5 vs
+  true 1.0/1.2/1.5 — peak sits at x*≈−0.2, shift is correction-dominated; logged dead end).
+- Methodological nugget: self-locating peak-HEIGHT is the lowest-bias accessible-size estimator of
+  2/ν−d (≤1.3% at q=2,3), better than fixed-g_c (overshoots +0.07). Full report: sprints/sprint_130.md.
+
 ### chi_F effective exponents (Sprints 127-128, exact chi_F; see Sprint 129 caveat above)
 
 | q | Hybrid alpha | S_q alpha (effective) | # sizes (S_q) | Pairwise drift (S_q) |

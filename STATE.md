@@ -1,61 +1,48 @@
 # Current State -- Rewrite this completely each sprint
 
 ## Last Sprint
-Sprint 129 -- AUDIT (user-requested external scrutiny). Machinery verified sound: g_c=1/q is exact
-self-dual (to 1e-15); finite-diff chi_F good to ~5 sig figs (dg=1e-4 bias shifts alpha by 5e-6); AIC
-procedure recovers truth in synthetic tests. But the q=4 HEADLINE WAS INVERTED -- see below. Full
-report: sprints/sprint_129_audit.md.
+Sprint 130 -- HARDENED the Sprint-129 q=4 reframing with two independent, calibrated χ_F FSS
+observables (CPU-only). Scanned the full χ_F(g,N) curve in the scaling window for q=2,3,4 and
+extracted: at-g_c exp, peak-HEIGHT exp, peak-SHIFT exp, and a data-collapse 1/ν.
+Full report: sprints/sprint_130.md. Data: results/sprint_130{a,b,c,d}*.json.
 
-## CRITICAL: q=4 framing corrected (Sprint 129)
-We measure PER-SITE chi_F, whose correct leading exponent at a QCP is 2/nu - d (Albuquerque et al.,
-PRB 81 064418, Eq.21). 4-state Potts nu=2/3 => **2/nu-d = 2.0 is the CORRECT answer, not a hypothesis
-to reject.** Our own q=3 anchor confirms the convention: nu=5/6 => 2/nu-d = 7/5 = 1.40 (our "exact"
-q=3 value). Measured q=4 = 1.77 is the FINITE-SIZE value below 2; q=4 has the marginal operator =>
-slow log-corrected approach to 2 (q=3 has none => converges cleanly).
-- exp_128c extrapolation "ruling out 2" is CIRCULAR: its no-log ansatz returns 1.60-1.89 when fed
-  true alpha=2-with-logs data. Retired as evidence.
-- "Salas-Sokal p=3/2" was MISLABELED: 3/2 is the 2D-classical specific-heat log power, not a chi_F
-  prediction. Drop the comparison.
-- At L<=11 (ln N x1.73) data CANNOT distinguish "1.77 forever" from "2 with marginal logs."
-  Open-BC DMRG drifts UP toward 2.
+## CRITICAL: q=4 reframing now CONFIRMED from our own data (Sprint 130)
+- **Data collapse (location scaling, log-insensitive): 1/ν(q=4)=1.45 → 1.49 after q=2,3 calibration
+  ⇒ ν=2/3 confirmed.** Excludes 1/ν≤1.2. (Calibration: q=2→0.97, q=3→0.975 vs true 1.0,1.2.)
+- **Peak-HEIGHT exp recovers 2/ν−d to ≤1.3% at q=2(1.013),q=3(1.403); q=4=1.747 = 12.7% BELOW 2.0**
+  ⇒ deficit is physical = the q=4 marginal log. Albuquerque residual 2κ−1−a: ~0 (q=2,3), +0.14 (q=4).
+- ν=2/3 (confirmed) + Albuquerque (proven) ⇒ amplitude exp **must →2**; measured ~1.77-1.81 is finite-size.
+- **Peak-SHIFT exp is UNUSABLE for ν** (1.8/2.3/2.5 vs true 1.0/1.2/1.5; peak at x*≈−0.2, correction-
+  dominated). Logged dead end -- do not revisit.
+- Self-check: my curve-based at-g_c q=3 exp=1.467 reproduces prior finite-diff 1.468 (S128). Pipeline sound.
 
-## CRITICAL: Standing corrections
-Use EXACT finite-difference chi_F (spectral has negative-alpha bias, S126). All sprints 076+ use the
-STANDARD S_q Potts model (not a novel hybrid; Apr 2026 audit). See KNOWLEDGE.md.
+## CRITICAL: Standing corrections (unchanged)
+Use EXACT finite-difference / curve chi_F (spectral has negative-alpha bias, S126). g_c=1/q exact
+self-dual. All sprints 076+ use the STANDARD S_q Potts model (not a novel hybrid; Apr 2026 audit).
 
 ## Active Research Thread
-**S_q q=4: is the per-site exponent the expected 2 (with marginal logs) or a true sub-2 value? --
-UNRESOLVED at accessible sizes.** Authoritative exact-chi_F effective exponents (n<=11):
-
-| q | nu | expected 2/nu-d | measured | status |
-|---|----|-----------------|----------|--------|
-| 3 | 5/6 | 1.400 | 1.41->1.407 | Converged (no marginal op) |
-| 4 | 2/3 | 2.000 | ~1.77-1.79 | Finite-size below 2; needs L>>11 |
-| 5 | -- | (walking) | 2.094 / 2.139* | *INCONSISTENT -- reconcile |
-| 6 | -- | (walking) | 2.375 | increasing |
-| 7 | -- | (walking) | 2.58-2.64 | increasing |
+**S_q q=4 per-site χ_F: ν=2/3 ⇒ asymptote 2/ν−d=2, finite-size effective ~1.77-1.81 (marginal log).**
+Now CONFIRMED via independent collapse, not just borrowed from literature. The remaining unmeasured
+piece is watching the amplitude exponent climb past 1.8 toward 2 at L≫11 (needs GPU/symmetry reduction;
+logic no longer requires it).
 
 ## QPU Budget
 580s remaining -- BLOCKED (qiskit-ibm.json empty).
 
 ## Top 3 Next Experiments
-1. **Resolve q=4: periodic-BC chi_F at L>>11.** Only larger sizes distinguish 2-with-logs from sub-2.
-   Symmetry-reduced ED or periodic DMRG. Fit chi_F = A*N^2*(ln N)^{-p}*(1+c/N^2) (needs n>=12).
-2. **Reconcile q=5 alpha** (2.094 vs 2.139) -- trace which sizes/fit produced each, pick one.
-3. **Fix results.db factor-2 split** -- absolute chi_F pre/post S125 differ x2; choose canonical
-   convention and annotate (exponents unaffected).
+1. **Reconcile q=5 alpha** (2.094 vs 2.139) -- trace which sizes/fit produced each, pick one. CPU-OK (n≤8).
+2. **Compress KNOWLEDGE.md / results.db factor-2 split** -- bookkeeping; choose canonical convention.
+3. **(If GPU returns) periodic-BC χ_F q=4 at n=12-14** -- watch amplitude exponent rise 1.8→2.0.
 
 ## What's Been Ruled Out / Retracted
-- ~~"q=4 alpha=1.77 asymptotic, Salas-Sokal rejected"~~ -- INVERTED (S129). 2 is correct; 1.77 is finite-size.
-- ~~exp_128c power-law extrapolation as evidence against logs~~ -- circular (S129).
-- Spectral chi_F as primary method (S126); alpha(q)=1.86 ln q-0.96 (S127); iDMRG overlap for S_q (S124).
-
-## Key Literature
-- **Albuquerque, Alet, Sire, Capponi, PRB 81 064418 (2010):** chi_F density ~ L^{2/nu-d}. THE correct null.
-- **Salas & Sokal (1997):** 2D CLASSICAL Potts; p=3/2 is SPECIFIC HEAT (chi log power is 1/8). Not chi_F.
-- Jacobsen-Wiese, Ma-He, GRZ: standard S_q Potts exponents.
+- **Peak-SHIFT FSS of χ_F** -- correction-dominated, useless for ν at accessible sizes (S130). Dead end.
+- ~~"q=4 alpha=1.77 asymptotic, Salas-Sokal rejected"~~ -- INVERTED (S129). 2 is correct; 1.77 finite-size.
+  Now POSITIVELY hardened (S130): ν=2/3 confirmed by independent collapse.
+- exp_128c power-law extrapolation as evidence against logs -- circular (S129).
+- Spectral chi_F as primary method (S126); iDMRG overlap for S_q (S124).
 
 ## Key Tools
-- Exact chi_F (periodic): q=3 n<=14, q=4 n<=11, q=5 n<=10, q=6 n<=9, q=7 n<=8
-- chi_F DMRG (open BC): q=2 n<=24, q=4 n<=20; hamiltonian_utils.py, fss_utils.py, gpu_utils.py
+- χ_F curve scan + peak + data collapse: experiments/collapse_utils.py (Sprint 130).
+- Exact chi_F (periodic): q=3 n<=12(CPU)/14(GPU), q=4 n<=10(CPU)/11(GPU), q=5 n<=10(GPU)
+- fss_utils.py (fit_power_law, pairwise_exponents), hamiltonian_utils.py, gpu_utils.py
 - IBM QPU: 580s remaining (credentials needed)

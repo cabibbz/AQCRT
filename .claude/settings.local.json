@@ -66,7 +66,25 @@
       "Bash(mv KNOWLEDGE.md KNOWLEDGE_old_backup.md)",
       "Bash(mv KNOWLEDGE_short.md KNOWLEDGE.md)",
       "Bash(ls -lah /c/Users/me/Desktop/autoquantum/experiments/*.py)",
-      "Bash(sqlite3:*)"
+      "Bash(sqlite3:*)",
+      "Bash(pip list:*)",
+      "Bash(ls C:/Users/me/Desktop/autoquantum/experiments/exp_11*.py)",
+      "Bash(grep -r \"build_hybrid_H\\\\|build_sq_potts\\\\|build_hamiltonian\\\\|def build_\" C:/Users/me/Desktop/autoquantum/experiments/exp_11*.py C:/Users/me/Desktop/autoquantum/experiments/exp_120*.py)",
+      "Bash(pip install:*)",
+      "Bash(ls C:/Users/me/Desktop/autoquantum/experiments/*.py)",
+      "Bash(ls:*)",
+      "Read(//c/Users/me/quantum-env/Scripts/**)",
+      "Read(//c/Users/me/quantum-env/bin/**)",
+      "Read(//c/Users/me/**)",
+      "Bash(where python:*)",
+      "Bash(source ~/quantum-env/Scripts/activate)",
+      "Bash(git status:*)",
+      "Bash(source C:/Users/me/quantum-env/Scripts/activate)",
+      "Bash(C:/Users/me/quantum-env/Scripts/python.exe -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(\"/c/Users/me/quantum-env/Scripts/python.exe\" -c \"import sys; print\\(sys.executable\\)\" 2>&1)",
+      "Bash(\"C:/Users/me/Desktop/autoquantum/~/quantum-env/Scripts/python.exe\" experiments/exp_128a_sq_q6_chif.py)",
+      "Bash(source \"C:/Users/me/Desktop/autoquantum/~/quantum-env/Scripts/activate\")",
+      "Bash(grep -l \"q.4\" results/*.json)"
     ]
   }
 }
