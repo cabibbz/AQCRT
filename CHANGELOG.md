@@ -4,6 +4,9 @@
 - Used: 20s of 600s (Sprint 025)
 - Remaining: 580s
 
+## Sprint 129 -- AUDIT: q=4 chi_F headline corrected (machinery sound, interpretation inverted)
+External user-requested multi-agent scrutiny; no new physics, all numbers reproduced from code/DB read-only. Full report: sprints/sprint_129_audit.md. **Verdict: the machinery is sound but the q=4 headline was inverted.** (1) g_c=1/q verified exact self-dual (1e-15); finite-diff chi_F good to ~5 sig figs (dg=1e-4 bias shifts alpha 5e-6); the AIC procedure passes a synthetic recovery test. (2) DECISIVE: we measure PER-SITE chi_F, whose correct leading exponent is 2/nu-d (Albuquerque et al., PRB 81 064418). For q=4 nu=2/3 => 2/nu-d=2.0 is the CORRECT value, not a hypothesis to reject; our own q=3=7/5 (nu=5/6) anchor proves the convention. Measured 1.77 is the finite-size value below 2 (marginal operator => slow log approach). (3) DECISIVE: exp_128c's no-log extrapolation is circular (returns 1.60-1.89 on true-alpha=2-with-logs data) and L<=11 cannot resolve logs; open-BC DMRG drifts UP toward 2. (4) "Salas-Sokal p=3/2" mislabeled (it is the 2D-classical specific-heat log power, not a chi_F prediction). Retracted "q=4 alpha=1.77 asymptotic / Salas-Sokal rejected". Also flagged: q=5 alpha inconsistency (2.094 vs 2.139), results.db factor-2 convention split, idle QPU. Reframed STATE.md and KNOWLEDGE.md.
+
 ## Sprint 128 -- q=6 gap filled, q=4 log corrections tested, hybrid thread closed
 (a) S_q q=6: alpha=2.375+/-0.006 (6 sizes, GPU). (b) Hybrid q=6: g_c=0.474, alpha=1.186. (c) Extrapolation fixed: DB-sourced, inf-guarded. S_q q=4 alpha_inf=1.771+/-0.001. (d) q=4 log corrections with exact chi_F: Power+1/N^2 wins (dAIC=41 over Salas-Sokal log). Best alpha=1.760. Salas-Sokal p=3/2 rejected (measured p=0.41). Model ranking same as spectral data. (e) Hybrid log vs power: power wins q<=4, log wins q>=6 (dAIC=20). Hybrid thread closed.
 
