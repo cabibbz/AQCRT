@@ -103,6 +103,32 @@ L>>12 can't be excluded (no sign of one); 1/lnL=0.40 at L=12 (far from asymptopi
 => large BC-dependent finite-size effects; periodic exact-diag is the cleaner bulk probe. Reconcile next.
 POTENTIALLY NOVEL (hardens the S128/129 "no prior chi_F log at q=4" flag); unpublished/sprint_132.md.
 
+### ✓ q=4 BC RECONCILED (Sprint 133) — open kappa_eff is NON-MONOTONIC; wrong-sign argument defused
+**Convention bug fixed:** prior open data (S113/S124 `chi_F_open`) used forward-diff/dg=1e-3/no-factor-2;
+periodic used canonical central/dg=1e-4/factor-2 -> "1.78 vs 1.52" was never apples-to-apples (canonical =
+~2x forward). Recomputed OPEN with the IDENTICAL canonical estimator, g_c=1/q, n=4..12 (GPU); validation:
+periodic reproduces DB to 5e-9, open forward-diff reproduces DB `chi_F_open` exactly, canon/forward=2.03.
+DB: `chi_F_open_exact` q=4 n=4..12 (canonical OPEN series).
+- **BC gap is REAL (convention-independent):** open kappa_eff(n=12)=1.537 vs periodic 1.778.
+- **Open kappa_eff NON-MONOTONIC (NEW):** minimum 1.5199 at n~7.5, then ACCELERATING climb (post-min
+  increments GROW +0.0023,+0.0041,+0.0050,+0.0054 -> still rising at frontier, NOT plateauing). S124 DMRG
+  computed n>=6 and saw only the rising tail -> "drifts up"; canonical exact-diag from n=4 reveals the full
+  **dip+turnaround**. Cross-method: S124 DMRG n=12..20 pairwise 1.515->1.524 (also rising) confirms the
+  rise direction across convention AND method.
+- **Periodic** = decelerating descent (decrements shrink geometrically x0.56) toward apparent plateau ~1.776.
+- **Reconciliation / what it resolves:** ratio chi_O/chi_P DECREASES away from 1 (0.352->0.260) =>
+  a vanishing multiplicative 1/L boundary is REFUTED; BC don't converge by n=12; joint shared-bulk fit is
+  non-identifiable (S132 degeneracy stands). BUT the open turnaround **neutralizes the S132 "wrong-sign
+  descent vs 2.0" argument**: S132 said true-2.0+single-marginal-log gives ascending kappa_eff while data
+  descend (tension); the open BC empirically shows descend-then-ASCEND for THIS observable, proving the
+  correction structure is richer than one monotonic log. A finite-window apparent plateau demonstrably
+  reverses (open did it) -> periodic's descent to ~1.78 is NOT evidence the asymptote is below 2.0.
+- **Honest status:** asymptote STILL unquotable at L<=12; 2.0-with-logs vs sub-2 plateau remain degenerate.
+  What changed = the two BCs' opposite drift directions are reconciled as one non-monotonic finite-size
+  flow (open ahead of periodic), and the wrong-sign tension is gone. POTENTIALLY NOVEL (hardening via
+  independent-BC cross-check, novelty-rule #2); no prior report of non-monotonic chi_F kappa_eff or an
+  open/periodic chi_F reconciliation for 4-state Potts. unpublished/sprint_133.md.
+
 ### chi_F effective exponents (Sprints 127-131, exact chi_F; see Sprint 129 caveat above)
 
 | q | Hybrid alpha | S_q alpha (effective) | # sizes (S_q) | Pairwise drift (S_q) |
@@ -124,7 +150,7 @@ BUT: (1) "**Salas-Sokal p=3/2**" is **MISLABELED** — 3/2 is the 2D-classical s
 
 **g_c(hybrid):** q=2->0.250, q=3->0.333, q=4->0.393, q=5->0.438, q=6->0.474, q=7->0.535, q=10->0.684.
 
-**DMRG extension (Sprint 124):** Open-BC chi_F at n=6-20 (8 sizes). Pairwise alpha drifts UPWARD: 1.505->1.523. Power+1/N^2 corrected alpha_open=1.524+/-0.002. Log-corrected alpha=2 still worst fit (R^2=0.9997 vs 0.999999). **But drift direction is upward** -- consistent with eventual convergence to higher value (periodic 1.77 or log-corrected 2.0). Asymptotic regime needs L>>20 (likely L>100). iDMRG overlap method FAILED for S_q Potts (non-abelian symmetry). **S132 caveat:** periodic exact-diag drifts DOWN (1.85->1.78 at n=12), open DMRG drifts UP (1.51->1.52) and sits far lower (~1.52 vs ~1.78) -- opposite directions, big BC effect; do not assume open "converges upward to periodic/2.0". Reconcile (subtract boundary term / matched sizes).
+**DMRG extension (Sprint 124):** Open-BC chi_F at n=6-20 (8 sizes). Pairwise alpha drifts UPWARD: 1.505->1.523. Power+1/N^2 corrected alpha_open=1.524+/-0.002. Log-corrected alpha=2 still worst fit (R^2=0.9997 vs 0.999999). **But drift direction is upward** -- consistent with eventual convergence to higher value (periodic 1.77 or log-corrected 2.0). Asymptotic regime needs L>>20 (likely L>100). iDMRG overlap method FAILED for S_q Potts (non-abelian symmetry). **S132 caveat:** periodic exact-diag drifts DOWN (1.85->1.78 at n=12), open DMRG drifts UP (1.51->1.52) and sits far lower (~1.52 vs ~1.78) -- opposite directions, big BC effect; do not assume open "converges upward to periodic/2.0". Reconcile (subtract boundary term / matched sizes). **S133 UPDATE:** the open "drifts up monotonically" reading is WRONG -- canonical exact-diag (matched convention, n=4..12) shows open kappa_eff DIPS to a min 1.520 at n~7.5 then rises (DMRG started at n=6, near the min, and missed the descent). The S124 DMRG values used forward/dg=1e-3 (~1/2 the canonical magnitude; exponent unaffected). See the "q=4 BC RECONCILED (S133)" section above -- BC reconciled, subtract-boundary model refuted.
 
 ### Hybrid model findings — CLOSED (Sprint 128e)
 Sprint 065 confirmed hybrid ≠ clock, Sprint 076 confirmed hybrid ≠ S_q Potts. Sprints 119-121: chi_F spectral decomposition confirms continuous transitions for q>=5 and walking->continuous boundary at q_cross=3.58. **Sprint 128e:** Power law wins for q<=4, logarithmic chi_F ~ A*(ln N)^beta wins for q>=6 (dAIC=20 at q=6), marginal at q=5. This is consistent with BKT-class transitions at large q. Thread closed — no further compute needed.
