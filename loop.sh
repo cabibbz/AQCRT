@@ -26,11 +26,19 @@ for i in $(seq 1 $SPRINTS); do
     echo ">>> Sprint $i/$SPRINTS — $(date) <<<"
     echo ""
 
-    # --- pre-sprint integrity gates (non-blocking: warn, don't halt research) ---
+    # --- pre-sprint integrity gates (BLOCKING: halt the loop if math or bookkeeping is broken) ---
     PRE="logs/preflight-$i-$TIMESTAMP.log"
     echo "[preflight] golden-values + db-drift checks -> $PRE"
-    if python experiments/test_golden.py > "$PRE" 2>&1; then echo "[preflight] golden: PASS"; else echo "[preflight] golden: *** FAIL *** (see $PRE)"; fi
-    if python experiments/db_check.py >> "$PRE" 2>&1; then echo "[preflight] db-check: consistent"; else echo "[preflight] db-check: *** DRIFT *** (see $PRE)"; fi
+    GATE_FAIL=0
+    if python experiments/test_golden.py > "$PRE" 2>&1; then echo "[preflight] golden: PASS"; else echo "[preflight] golden: *** FAIL ***"; GATE_FAIL=1; fi
+    if python experiments/db_check.py >> "$PRE" 2>&1; then echo "[preflight] db-check: consistent"; else echo "[preflight] db-check: *** DRIFT ***"; GATE_FAIL=1; fi
+    if [ $GATE_FAIL -ne 0 ]; then
+        echo ""
+        echo "!!! PRE-SPRINT GATE FAILED at sprint $i -- HALTING LOOP."
+        echo "    A golden-values regression (broken chi_F math) or a doc<->results.db drift was found."
+        echo "    Running further sprints would compound the error. Fix it (see $PRE), then restart loop.sh."
+        exit 1
+    fi
 
     # --- the sprint (forensic per-sprint NDJSON; stream-json so headless output IS captured) ---
     SPRINT_LOG="logs/sprint-$i-$TIMESTAMP.jsonl"
