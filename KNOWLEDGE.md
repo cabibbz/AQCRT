@@ -9,7 +9,7 @@
 - **~~Log corrections to α(q)~~** CORRECTED (Sprint 109). Sprint 108's 1/ln(N) extrapolation was WRONG for q=2,3. Power-law 1/N² corrections recover exact ν: q=2→α_∞=1.00 (exact 1.0), q=3→α_∞=1.40 (exact 7/5). Walking (q≥5) zero corrections confirmed. q=4 BKT genuinely slow (neither model converges at accessible sizes).
 - **Hardware validation** — 580s QPU unused for ~90 sprints (BLOCKED: ~/.qiskit/qiskit-ibm.json empty). Strongest prediction: q=2 Ising χ_F at g_c, or Heisenberg chain c_eff on 5-10 qubits.
 - **CHANGELOG.md is over budget (~445 lines vs 300 trigger).** Compress sprints older than the last ~10 into one-line summaries. (KNOWLEDGE.md ~160 lines — the S132/S133 q=4 blocks were consolidated into one S134 block this sprint.)
-- **q=4 χ_F asymptote (active):** standard peak-height estimator ascends toward 2/ν−d=2.0 for BOTH BC (S134); value not pinned at L≤12 (marginal-log slow). Next: reach L≫12 (periodic DMRG at the peak) or a second on-peak observable; see STATE.md.
+- **q=4 χ_F asymptote (active):** on-peak peak-height κ_eff ascends toward 2/ν−d=2.0; **S135 pushed OPEN on-peak χ_F to n=24 via DMRG** (κ_eff 0.66→1.49, monotone, no plateau) and **DETECTED the marginal-operator log in χ_F**: a no-log surface fit κ=K+d/L recovers the q=3 control null EXACTLY (K=1.401) but gives K=1.70 at q=4 (undershoot=the log), and a fixed-null 2.0+s/lnL+d/L fit needs s≈−1.26 (q3: s≈0). Asymptote still NOT pinned at L≤24 (slow log; open surface term blocks a clean 1/lnL pin — naive/free fits overshoot, q3→1.94). Next: periodic past n=12 (TeNPy finite-periodic hard) or L≫24. See STATE.md.
 
 ## Five Entanglement Archetypes
 | Archetype | Example | MI pattern | I3 sign | Negativity | Source |
@@ -110,6 +110,24 @@ d ln r/d ln L**, r(L)=χ_F(g_c)/χ_F(g*). Re-measuring at the peak g*(L) — the
   open-vs-periodic reconciliation" — both were fixed-g_c off-peak readings (detail: sprints/sprint_13{2,3}.md).
   The S132 datum **χ_F(n=12 periodic, g_c)=93.747642** and the S133 `chi_F_open_exact` series stand as DATA;
   only their effective-exponent *interpretation* is corrected here.
+
+### ✓ q=4 χ_F marginal-operator LOG detected, open on-peak to n=24 via DMRG (Sprint 135)
+Extended S134's on-peak peak-height χ_F (the correct observable) past the n=12 exact frontier with TeNPy
+DMRG (OPEN BC). **Method validated:** real-dtype S_q ops; chi=48 converges χ_F to 1e-6 (chiconv vs exact at
+n=12); central dg=1e-3 warm-started; **forward-diff peak then +dg/2 correction** (forward χ_F peaks at
+g*−dg/2). DMRG reproduces S134 exact on-peak χ_F to ≤0.06% at n=8,10,12. DB: `chi_F_open_peak`/`gstar_open`
+q=4 n=8..24, q=3 n=8..24 (sprint 135).
+- **q=4:** open on-peak κ_eff ASCENDS MONOTONICALLY 0.66→1.49 (n=4..24), no plateau, joins exact seamlessly.
+- **q=3 control (no marginal op, null 1.40) VALIDATES the fit:** no-log surface fit κ=K+d/L → **K=1.401**
+  (= exact null, R²=1.0); fixed-null fit log coeff **s=+0.003 (zero)**. q3 needs NO log.
+- **q=4 same fits ⇒ LOG required:** no-log κ=K+d/L → **K=1.70** (undershoots 2.0 = the finite-size effective
+  exp ~"1.7-1.8" seen historically); fixed-null `2.0+s/lnL+d/L` → **s=−1.26**, max|resid|=0.02 (consistent
+  with proven 2.0+log). So the marginal-operator log is **present at q=4 (s≈−1.2), absent at q=3 (s≈0)** —
+  the χ_F analogue of the Cardy(1986)/Hamer(1988) 1/lnL gap correction.
+- **Rigorous caveat:** naive κ=K+s/lnL and free 3-param fits OVERSHOOT for BOTH q (q3→1.94 not 1.4, q4→2.3-2.5)
+  ⇒ unreliable; only the proven-null-fixed and the no-log-control fits are trustworthy. **Asymptote NOT pinned**
+  at L≤24 (slow log; open surface 1/L term prevents a clean 1/lnL pin). POTENTIALLY NOVEL (modest): χ_F
+  marginal-log for 4-state Potts chain, isolated by the q=3 control. unpublished/sprint_135.md.
 
 ### chi_F effective exponents (Sprints 127-131, exact chi_F; see Sprint 129 caveat above)
 
