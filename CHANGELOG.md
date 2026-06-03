@@ -325,97 +325,15 @@ Full details for sprints 086-094 are in sprints/sprint_NNN.md.
 
 [Full report: sprints/sprint_109.md]
 
-### Sprint 110 — Extend α(q) to q=5-9: Formula Revision
-**Status:** Complete (3 experiments).
-
-**q=6 GPU extension (110a).** 4 sizes n=6-9 (GPU for n=9, dim=10M, 305s). Vectorized builder. Pairwise α converges upward: 2.358→2.380→2.402. Global α=2.377. Single-multiplet dominance (frac=1.000) confirmed.
-
-**q=8,9 new measurements (110b).** q=8 n=6,7: α=2.897. q=9 n=6,7: α=3.159. Both below Sprint 103 formula prediction (2.99, 3.30). Single-multiplet dominance universal through q=9.
-
-**α(q) formula refit (110c).** Sprint 103's α=0.315q+0.469 **REVISED** — was biased by including q=4 (BKT). Pure walking data (q=5-9): α ≈ 0.262q + 0.815 (linear, RMS=0.019) or α ≈ -0.009q²+0.389q+0.386 (quadratic, RMS=0.011, AIC-preferred ΔAIC=3.3). Bias-corrected: α ≈ 0.272q + 0.754. Component fits updated: z_m=0.082q+0.741, β_me=0.098q+0.333. Reconstructed α exactly matches direct fit.
-
-**Partial revision of Sprint 103:** Formula coefficients updated but confirmed novel phenomenon (linear α(q) in walking regime) unchanged.
-
-[Full report: sprints/sprint_110.md]
-
-### Sprint 111 — q=10 χ_F Measurement: Power-Law α(q) Preferred
-**Status:** Complete (2 experiments).
-
-**q=10 spectral decomposition (111a).** 3 sizes n=5,6,7 (GPU for n=7, dim=10M, 700s). Pairwise α: (5,6)→3.295, (6,7)→3.417 — converging upward. Global α=3.349. Single-multiplet dominance (frac=1.000) at all sizes. z_m=1.566, β_me=1.285.
-
-**α(q) refit with q=10 (111b).** 6 data points (q=5-10). AIC model comparison: power-law 0.69·q^0.69 preferred (ΔAIC=4.1 over linear). Linear 0.260q+0.827 (RMS=0.018) vs quadratic (RMS=0.013) vs power-law (RMS=0.013). Component fits stable: z_m=0.083q+0.734, β_me=0.094q+0.360. Reconstructed α matches direct linear fit exactly.
-
-**Key findings:** (1) Single-multiplet dominance universal through q=10. (2) Power-law α(q) slightly preferred, but discrimination weak — all models fit comparably. (3) χ_F super-scaling (α>2) persists where walking has broken down (c_eff/Re(c)=0.60), confirming single-multiplet mechanism is independent of entropy-based walking.
-
-[Full report: sprints/sprint_111.md]
-
-### Sprint 112 — q=12 χ_F Measurement: Quadratic α(q) Strongly Preferred
-**Status:** Complete (2 experiments).
-
-**q=12 spectral decomposition (112a).** 3 sizes n=4,5,6 (GPU for n=6, dim=3.0M, 160s). Pairwise α: (4,5)→3.553, (5,6)→3.734 — converging upward. Global α=3.631. Single-multiplet dominance (frac=1.000) at all sizes. z_m=1.662, β_me=1.307. All three prior fits (linear, power-law, quadratic from Sprint 111) overshoot.
-
-**α(q) refit with q=12 (112b).** 7 data points (q=5-12). AIC model comparison: **quadratic −0.010q²+0.41q+0.30 strongly preferred** (ΔAIC=12.2 over linear). Ranking: quadratic (0) > √q (+2.2) > log (+5.3) > power-law (+5.5) > linear (+12.2). Linear model RULED OUT. α(q) is sublinear — growth slows with q, approaching saturation near α≈4-5.
-
-**Key findings:** (1) Linear α(q) from Sprint 110 definitively wrong at q≥12. (2) Sublinear growth — quadratic or √q form. (3) Single-multiplet dominance universal through q=12. (4) χ_F super-scaling persists at q=12 where walking is fully broken (c_eff/Re(c)≈0.51).
-
-[Full report: sprints/sprint_112.md]
-
-### Sprint 113 — DMRG Fidelity Susceptibility: Boundary Conditions Matter
-**Status:** Complete (3 experiments).
-
-**DMRG overlap χ_F validated (113a).** q=2 open BC, n=8-20 (DMRG extends to n=20). DMRG matches exact diag to 6 decimal places at all overlapping sizes (n=8-14). Open-BC pairwise α converges: 1.097→1.037. Global α=1.065, heading toward exact 1.0.
-
-**q=4 and q=5 DMRG χ_F (113b).** Open-BC α dramatically different from periodic: q=4 α_open=1.51 (vs periodic 1.77), q=5 α_open=1.60 (vs periodic 2.09). Boundary effects dominate.
-
-**Periodic vs open BC comparison (113c).** Overlap method matches spectral method exactly at periodic BC (q=4: 1.79 vs 1.77, q=5: 2.09 vs 2.09). BC effect on α: Δα=0.03 (q=2), 0.29 (q=4), 0.49 (q=5). **Periodic/open χ_F ratio diverges with N** (~N^{Δα}). Boundary fidelity susceptibility is enhanced at walking transitions.
-
-**Key finding: Open-BC DMRG CANNOT extend α(q) to larger sizes.** Boundary effects for q≥4 are too large and growing. The q=4 open-BC α≈1.5 is coincidental, not evidence for BKT ν=2/3. Periodic exact diag remains the definitive measurement.
-
-**POTENTIALLY NOVEL:** First systematic mapping of χ_F boundary condition dependence across walking boundary. Discovery that boundary fidelity susceptibility is enhanced (divergent ratio) at walking transitions.
-
-[Full report: sprints/sprint_113.md]
-
-### Sprint 114 — q=15 χ_F: Logarithmic α(q) Growth Emerging
-**Status:** Complete (2 experiments).
-
-**q=15 spectral decomposition (114a).** 3 sizes n=3,4,5 (GPU for n=5, dim=759k, 56s). Pairwise α: (3,4)→3.815, (4,5)→4.070 — converging upward. Global α=3.921. Single-multiplet dominance (frac=1.000) at all sizes. z_m=1.784, β_me=1.353. ALL prior models overpredict: quadratic by 0.28, √q by 0.40, log by 0.25, linear by 0.81.
-
-**α(q) refit with 8 points q=5-15 (114b).** Quadratic overwhelmingly AIC-best (ΔAIC=14.9 over logarithmic). BUT quadratic −0.0134q²+0.451q+0.159 peaks at q≈17 then DECREASES — physically unreasonable. Logarithmic α(q) ≈ 1.73 ln(q) − 0.68 is the best physically unbounded model (RMS=0.041). Components also logarithmic: z_m ≈ 0.75 ln(q) − 0.21, β_me ≈ 1.31 ln(q) − 2.05.
-
-**Key findings:** (1) α(q) sublinearity is stronger than any prior model predicted. (2) Logarithmic growth is the most physically plausible form — both components are individually logarithmic. (3) Single-multiplet dominance universal through q=15 where walking is fully broken.
-
-[Full report: sprints/sprint_114.md]
-
-### Sprint 115 — q=20 χ_F: Logarithmic α(q) Confirmed as AIC-Best
-**Status:** Complete (2 experiments).
-
-**q=20 spectral decomposition (115a).** 3 sizes n=3,4,5 (GPU for n=5, dim=3.2M, 333s). Pairwise α: (3,4)→4.416, (4,5)→4.835 — converging upward. Global α=4.590. Single-multiplet dominance (frac=1.000) at all sizes. z_m=2.047 (first time >2.0), β_me=1.496. Quadratic predicted 3.82 — off by 0.77 (DECISIVELY RULED OUT). Logarithmic predicted 4.49 — closest (off by 0.10).
-
-**α(q) refit with 9 points q=5-20 (115b).** **Logarithmic NOW AIC-BEST** (ΔAIC=0, was +14.9 behind quadratic in Sprint 114). Updated: α(q) ≈ 1.78 ln(q) − 0.79 (RMS=0.046). Quadratic falls to ΔAIC=+9.4 and peaks at q≈24 (unphysical). All other models ΔAIC≥11.3. Components also logarithmic: z_m ≈ 0.76 ln(q) − 0.23, β_me ≈ 1.13 ln(q) − 1.68 (both AIC-best).
-
-**Key findings:** (1) q=20 measurement flips AIC ranking — logarithmic goes from second-best to best. (2) Quadratic definitively ruled out (17% error at q=20). (3) z_m crosses 2.0 — multiplet gap closes faster than 1/N² (super-quartic χ_F). (4) Single-multiplet dominance universal through q=20 where walking is fully broken.
-
-[Full report: sprints/sprint_115.md]
-
-### Sprint 116 -- q=25 chi_F: Log+Loglog Subleading Correction Emerges
-**Status:** Complete (2 experiments).
-
-**q=25 spectral decomposition (116a).** 3 sizes n=3,4,5 (GPU for n=5, dim=9.8M, 1616s -- pushing GPU limit). Pairwise alpha: (3,4)->4.932, (4,5)->5.504 -- converging upward. Global alpha=5.170. Single-multiplet dominance (frac=1.000) at all sizes. z_m=2.286, beta_me=1.598. Pure log predicted 4.94 -- underpredicts by 4.7% (+0.23).
-
-**alpha(q) refit with 10 points q=5-25 (116b).** **Log+loglog marginally AIC-best** (dAIC=1.4 over pure log): alpha(q) = 2.62 ln(q) - 1.77 ln(ln(q)) - 1.26. Pure log updated: 1.86 ln(q) - 0.96 (RMS=0.072). Quadratic peaks at q=32.6 (dAIC=+7.7, unphysical). Sqrt/power-law dAIC>=4.2. z_m(q) = 0.786 ln(q) - 0.290 (log AIC-best for components).
-
-**Key findings:** (1) alpha(q=25)=5.17 confirms continued growth. (2) Subleading ln(ln(q)) correction improves fit but dAIC=1.4 is not decisive (need >4). (3) z_m=2.29 continues past 2.0. (4) n=5 at q=25 (9.8M) took 1616s -- practical GPU limit reached. (5) q=30 predictions: log+loglog 5.47, pure log 5.37.
-
-[Full report: sprints/sprint_116.md]
-
-### Sprint 117 -- q=30 chi_F: Logarithmic Model Stabilizes
-**Status:** Complete (2 experiments).
-
-**q=30 spectral decomposition (117a).** n=3,4 only (n=5=24.3M exceeds GPU). Pair(3,4) alpha=5.384. z_m=2.384. Single-multiplet dominance at q=30. Pure log predicted 5.37, log+loglog predicted 5.47.
-
-**alpha(q) refit with 11 points (117b).** dAIC gap narrowed from 1.4 to 0.8. LOO cross-validation: log+loglog 0.081 vs pure log 0.085 -- nearly identical. **Pure logarithmic alpha(q) = 1.87 ln(q) - 0.97 is the preferred model** (Occam's razor). alpha(q) mapping q=5-30 now complete with diminishing returns.
-
-[Full report: sprints/sprint_117.md]
+### Sprints 110-117 -- alpha(q) walking-regime mapping q=5..30 (compressed; see KNOWLEDGE.md + sprints/)
+- **110** q=5-9: linear alpha(q) from S103 revised (q=4 was BKT contaminant); walking alpha~0.262q+0.815; single-multiplet universal.
+- **111** q=10 chi_F alpha=3.349; power-law alpha(q) slightly preferred; super-scaling persists where walking broken (c_eff/Re(c)=0.60).
+- **112** q=12 chi_F alpha=3.631; QUADRATIC alpha(q) preferred, linear RULED OUT (dAIC=12); growth sublinear.
+- **113** DMRG chi_F open-vs-periodic BC: open-BC alpha far lower (q=4 1.51, q=5 1.60) and boundary effect GROWS with N; periodic exact diag definitive. POTENTIALLY NOVEL: chi_F BC-dependence enhanced at walking transition.
+- **114** q=15 alpha=3.921; logarithmic alpha(q) growth emerging; quadratic peaks unphysically.
+- **115** q=20 alpha=4.590; LOGARITHMIC alpha(q) becomes AIC-best; quadratic decisively ruled out; z_m crosses 2.0.
+- **116** q=25 alpha=5.170; log+loglog marginally best (dAIC=1.4, not decisive); n=5 dim 9.8M took 1616s = practical GPU limit.
+- **117** q=30 alpha(3,4)=5.384; pure log alpha(q)=1.87 ln(q)-0.97 preferred (Occam, LOO ties); q=5-30 mapping complete (diminishing returns).
 
 ### Sprint 118 -- q=4 chi_F Extended + Model Identity Audit
 **Status:** Complete (1 experiment + audit).
