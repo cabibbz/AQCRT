@@ -36,7 +36,8 @@ prediction for HW: q=2 Ising χ_F (or thermal gap) at g_c on 5-10 qubits. Needs 
    crossover (slope steepening past the conformal shadow) at L≳ξ. OPEN BC ok (the crossover is bulk physics).
 2. **Compare 1/ν_eff(q≥5) to Jacobsen–Wiese (PRL 133 077101, 2024) complex ν.** They give the analytic-
    continuation (complex) Potts exponents; check our shadow 1/ν_eff(5,6,7)=1.51/1.65/1.78 vs Re(1/ν_complex).
-3. **CHANGELOG.md compression** (~470 > 300). Compress sprints older than last ~10 to one-liners. OVERDUE.
+3. **CHANGELOG.md**: detailed entries now = last 10 (127-136); 125-126 compressed (S136). The file is long
+   but the remainder is already one-liner history (not auto-loaded each sprint) -- low priority.
 
 ## Ruled Out / Retracted
 - Pre-data guess "walking ⇒ Im(g_EP)→γ>0 plateau" -- WRONG (sat-fit γ=0 ∀q; the finite-L gap EP →0 for both

@@ -34,11 +34,10 @@ External user-requested multi-agent scrutiny; no new physics, all numbers reprod
 ## Sprint 127 -- Extended exact chi_F to GPU sizes (up to 10M dim)
 12 new data points across S_q and hybrid models at q=3,4,5,7. GPU-accelerated eigsh at dim up to 9.8M. Error bars reduced 17-62%. S_q q=5: alpha=2.094+/-0.002 (62% tighter). S_q q=4: alpha=1.795, pairwise (10,11)=1.779, still drifting below 2.0. S_q q=7: alpha=2.636, pairwise increasing. Hybrid alpha(q) confirmed non-monotonic (peaks q~3-4, drops to 0.96 at q=7). Prior alpha(q)=1.86*ln(q) fit obsolete -- new slope 1.306.
 
-## Sprint 126 -- Corrected spectral chi_F: systematic exponent bias quantified
-Factor-2 corrected spectral still shows 0.5-4% alpha underestimate because non-dominant fraction grows with size. Extracted authoritative exponents via exact chi_F (finite-difference) with error bars for S_q and hybrid at q=3,4,5,7. S_q alpha: 1.48→2.61 (monotonic with q). Hybrid alpha: peaks at q≈3-4 then decreases. Model comparison survives all corrections — >10σ divergence at q≥4.
-
-## Sprint 125 — Factor-2 prefactor error found in spectral chi_F
-Spectral method captures exactly 50% of true chi_F due to missing factor-2 in Lehmann sum. After correction, matches exact to 0-2.2%. k-truncation is NOT the issue (k=200 same as k=12). Dominant fraction is 0.92-0.99, not 1.000. Scaling exponents UNAFFECTED.
+## Compressed Sprint History (Sprints 125-126)
+- **125** — Spectral chi_F factor-2 prefactor bug found (captures 50% of true chi_F; missing Lehmann factor-2). After fix matches exact to 0-2.2%; k-truncation not the issue; exponents UNAFFECTED.
+- **126** — Corrected spectral chi_F still 0.5-4% alpha-low (non-dominant fraction grows with size). Authoritative exponents via EXACT chi_F (finite-diff) w/ error bars; S_q alpha 1.48→2.61 monotone in q; model comparison >10sigma at q>=4. (Use exact chi_F for all exponent claims.)
+Full details: sprints/sprint_12{5,6}.md.
 
 ## Compressed Sprint History (Sprints 001-024)
 
