@@ -8,7 +8,8 @@
 - **~~Harden χ_F mechanism~~** DONE (Sprint 107). 5 sizes at q=5, cross-validated. CONFIRMED NOVEL.
 - **~~Log corrections to α(q)~~** CORRECTED (Sprint 109). Sprint 108's 1/ln(N) extrapolation was WRONG for q=2,3. Power-law 1/N² corrections recover exact ν: q=2→α_∞=1.00 (exact 1.0), q=3→α_∞=1.40 (exact 7/5). Walking (q≥5) zero corrections confirmed. q=4 BKT genuinely slow (neither model converges at accessible sizes).
 - **Hardware validation** — 580s QPU unused for ~90 sprints (BLOCKED: ~/.qiskit/qiskit-ibm.json empty). Strongest prediction: q=2 Ising χ_F at g_c, or Heisenberg chain c_eff on 5-10 qubits.
-- **CHANGELOG.md is over budget (511 lines vs 300 trigger).** Compress sprints older than the last ~10 into one-line summaries. (KNOWLEDGE.md itself is fine at ~130 lines — the old "560-line" note was stale, removed S131.)
+- **CHANGELOG.md is over budget (~445 lines vs 300 trigger).** Compress sprints older than the last ~10 into one-line summaries. (KNOWLEDGE.md ~160 lines — the S132/S133 q=4 blocks were consolidated into one S134 block this sprint.)
+- **q=4 χ_F asymptote (active):** standard peak-height estimator ascends toward 2/ν−d=2.0 for BOTH BC (S134); value not pinned at L≤12 (marginal-log slow). Next: reach L≫12 (periodic DMRG at the peak) or a second on-peak observable; see STATE.md.
 
 ## Five Entanglement Archetypes
 | Archetype | Example | MI pattern | I3 sign | Negativity | Source |
@@ -83,51 +84,32 @@ and q=3→1/ν=1.2, no marginal op):
 - Methodological nugget: self-locating peak-HEIGHT is the lowest-bias accessible-size estimator of
   2/ν−d (≤1.3% at q=2,3), better than fixed-g_c (overshoots +0.07). Full report: sprints/sprint_130.md.
 
-### ⚠ q=4 n=12 FRONTIER (Sprint 132) — trend is WRONG-SIGN for marginal-log->2; tension sharpened
-GPU restored (cupy-cuda12x 13.6.0, numpy 1.26.4 pinned). First q=4 point past the CPU wall:
-**chi_F(n=12, dim 16.78M) = 93.747642** (periodic, g_c=1/q, dg=1e-4). Full n=4..12 power law alpha=1.790.
-Pairwise local exponent **DECREASES monotonically** 1.846->1.799->...->**1.778** with shrinking
-decrements, moving AWAY from null 2.0 (|gap| GROWS 0.154->0.222). A single marginally-irrelevant (1/lnL)
-or additive log on leading power 2.0 FORCES alpha_loc to *increase* toward 2 -- verified by synthetic
-recovery (exp_132d): a true 2.0xmarg-log endpoint-matched to our data gives *increasing* 1.773->1.853;
-real data decrease (RMS local-exp dist 0.060 vs 0.005 for a genuine power). So the diagnostic is
-NON-circular (unlike a no-log chi-extrapolation, S129) and the data fall on the a<2 side.
-**q=3 CONTROL (exp_132e, n=4..14):** q=3 has no marginal op (null 1.40); its local exp descends ONTO
-1.40 (|gap| SHRINKS 0.168->0.037). Opposite of q=4 (descends AWAY from 2.0). BUT the control also
-calibrates the 1/lnN gap-extrapolation as **unreliable** -- it fabricates g_inf=-0.18 for q=3 where
-the true deficit is 0. **So DO NOT quote a q=4 asymptote (~1.72-1.78 is the *observed-window* effective
-exp, not a limit).** Robust claim = TREND DIRECTION only. NOT a refutation of 2.0: nu=2/3 (S130 collapse)
-+ Albuquerque (2/nu-d=2, proven) still predict leading 2; a non-monotone correction with a turnaround at
-L>>12 can't be excluded (no sign of one); 1/lnL=0.40 at L=12 (far from asymptopia).
-**Open vs periodic tension:** open-BC DMRG (S124) drifts UP 1.505->1.523 (opposite direction, ~1.52<<1.78)
-=> large BC-dependent finite-size effects; periodic exact-diag is the cleaner bulk probe. Reconcile next.
-POTENTIALLY NOVEL (hardens the S128/129 "no prior chi_F log at q=4" flag); unpublished/sprint_132.md.
-
-### ✓ q=4 BC RECONCILED (Sprint 133) — open kappa_eff is NON-MONOTONIC; wrong-sign argument defused
-**Convention bug fixed:** prior open data (S113/S124 `chi_F_open`) used forward-diff/dg=1e-3/no-factor-2;
-periodic used canonical central/dg=1e-4/factor-2 -> "1.78 vs 1.52" was never apples-to-apples (canonical =
-~2x forward). Recomputed OPEN with the IDENTICAL canonical estimator, g_c=1/q, n=4..12 (GPU); validation:
-periodic reproduces DB to 5e-9, open forward-diff reproduces DB `chi_F_open` exactly, canon/forward=2.03.
-DB: `chi_F_open_exact` q=4 n=4..12 (canonical OPEN series).
-- **BC gap is REAL (convention-independent):** open kappa_eff(n=12)=1.537 vs periodic 1.778.
-- **Open kappa_eff NON-MONOTONIC (NEW):** minimum 1.5199 at n~7.5, then ACCELERATING climb (post-min
-  increments GROW +0.0023,+0.0041,+0.0050,+0.0054 -> still rising at frontier, NOT plateauing). S124 DMRG
-  computed n>=6 and saw only the rising tail -> "drifts up"; canonical exact-diag from n=4 reveals the full
-  **dip+turnaround**. Cross-method: S124 DMRG n=12..20 pairwise 1.515->1.524 (also rising) confirms the
-  rise direction across convention AND method.
-- **Periodic** = decelerating descent (decrements shrink geometrically x0.56) toward apparent plateau ~1.776.
-- **Reconciliation / what it resolves:** ratio chi_O/chi_P DECREASES away from 1 (0.352->0.260) =>
-  a vanishing multiplicative 1/L boundary is REFUTED; BC don't converge by n=12; joint shared-bulk fit is
-  non-identifiable (S132 degeneracy stands). BUT the open turnaround **neutralizes the S132 "wrong-sign
-  descent vs 2.0" argument**: S132 said true-2.0+single-marginal-log gives ascending kappa_eff while data
-  descend (tension); the open BC empirically shows descend-then-ASCEND for THIS observable, proving the
-  correction structure is richer than one monotonic log. A finite-window apparent plateau demonstrably
-  reverses (open did it) -> periodic's descent to ~1.78 is NOT evidence the asymptote is below 2.0.
-- **Honest status:** asymptote STILL unquotable at L<=12; 2.0-with-logs vs sub-2 plateau remain degenerate.
-  What changed = the two BCs' opposite drift directions are reconciled as one non-monotonic finite-size
-  flow (open ahead of periodic), and the wrong-sign tension is gone. POTENTIALLY NOVEL (hardening via
-  independent-BC cross-check, novelty-rule #2); no prior report of non-monotonic chi_F kappa_eff or an
-  open/periodic chi_F reconciliation for 4-state Potts. unpublished/sprint_133.md.
+### ✓✓ q=4 χ_F WRONG-SIGN TENSION RESOLVED (Sprint 134) — it was a fixed-g_c (off-peak) artifact
+**The single most important update to this thread.** S132/S133 measured χ_F at the FIXED periodic
+g_c=1/q. But the finite-size χ_F PEAK sits at a pseudo-critical g*(L)≠g_c (boundary/rounding shift),
+g*(L)→g_c as L→∞. Evaluating at fixed g_c samples a MOVING off-peak tail; the off-peak penalty's
+log-derivative pollutes the effective exponent. Identity (verified to 5e-15): **κ_fixed = κ_onpeak +
+d ln r/d ln L**, r(L)=χ_F(g_c)/χ_F(g*). Re-measuring at the peak g*(L) — the STANDARD FSS observable
+(Albuquerque uses the peak) — for BOTH BC, n=4..12 (DB: `chi_F_open_peak`, `chi_F_periodic_peak`, `gstar_open`):
+- **OPEN: the S133 "non-monotonic dip+turnaround" is GONE on-peak** — κ_onpeak rises MONOTONICALLY
+  0.657→1.281 (no interior min). The S133 dip lived entirely in the off-peak penalty (open peak is far
+  below g_c, shift −0.097→−0.027; χ_peak 3–5× χ(g_c)). **RETRACT S133's non-monotonic-κ_eff claim.**
+- **PERIODIC: the S132 "descent away from 2.0" is ALSO a fixed-g_c effect** — κ_onpeak ASCENDS 1.683→1.761
+  toward 2.0 while κ_fixed-g_c descends 1.86→1.78. Periodic shift is tiny (−0.022→−0.0014).
+- **VALIDATION (linchpin, exp_134b/e):** for q=2,3 (no marginal op, exact nulls) PERIODIC on-peak ASCENDS
+  from below to the null while fixed-g_c DESCENDS from above to the SAME null — both bracket it
+  (q=2: 1.022/1.072→1.0; q=3: 1.414/1.444→1.4). A descending fixed-g_c κ is NOT evidence of a sub-null
+  asymptote. So q=4's on-peak↑/fixed↓ share destination **2/ν−d = 2.0**; q=4 is just slower (marginal log).
+- **NET:** the standard peak-height estimator ascends toward 2.0 for BOTH BC — the same validated direction
+  as q=2,3. The S129–S133 apparent evidence against 2.0 (descent, dip, "richer correction structure") was a
+  fixed-coupling artifact. **Asymptote still NOT numerically pinned at L≤12** (q=4 on-peak ~1.76 periodic /
+  1.28 open, marginal-log slow), but the flow DIRECTION now matches the proven cases and NO standard-estimator
+  feature suggests a sub-2 plateau. POTENTIALLY NOVEL (modest/methodological): opposite fixed↓/peak↑ drift at
+  the marginal q=4 point manufacturing an apparent wrong-sign tension; no prior report. unpublished/sprint_134.md.
+- *Superseded:* S132 "trend is wrong-sign for marginal-log→2" and S133 "open κ_eff non-monotonic /
+  open-vs-periodic reconciliation" — both were fixed-g_c off-peak readings (detail: sprints/sprint_13{2,3}.md).
+  The S132 datum **χ_F(n=12 periodic, g_c)=93.747642** and the S133 `chi_F_open_exact` series stand as DATA;
+  only their effective-exponent *interpretation* is corrected here.
 
 ### chi_F effective exponents (Sprints 127-131, exact chi_F; see Sprint 129 caveat above)
 
@@ -150,7 +132,7 @@ BUT: (1) "**Salas-Sokal p=3/2**" is **MISLABELED** — 3/2 is the 2D-classical s
 
 **g_c(hybrid):** q=2->0.250, q=3->0.333, q=4->0.393, q=5->0.438, q=6->0.474, q=7->0.535, q=10->0.684.
 
-**DMRG extension (Sprint 124):** Open-BC chi_F at n=6-20 (8 sizes). Pairwise alpha drifts UPWARD: 1.505->1.523. Power+1/N^2 corrected alpha_open=1.524+/-0.002. Log-corrected alpha=2 still worst fit (R^2=0.9997 vs 0.999999). **But drift direction is upward** -- consistent with eventual convergence to higher value (periodic 1.77 or log-corrected 2.0). Asymptotic regime needs L>>20 (likely L>100). iDMRG overlap method FAILED for S_q Potts (non-abelian symmetry). **S132 caveat:** periodic exact-diag drifts DOWN (1.85->1.78 at n=12), open DMRG drifts UP (1.51->1.52) and sits far lower (~1.52 vs ~1.78) -- opposite directions, big BC effect; do not assume open "converges upward to periodic/2.0". Reconcile (subtract boundary term / matched sizes). **S133 UPDATE:** the open "drifts up monotonically" reading is WRONG -- canonical exact-diag (matched convention, n=4..12) shows open kappa_eff DIPS to a min 1.520 at n~7.5 then rises (DMRG started at n=6, near the min, and missed the descent). The S124 DMRG values used forward/dg=1e-3 (~1/2 the canonical magnitude; exponent unaffected). See the "q=4 BC RECONCILED (S133)" section above -- BC reconciled, subtract-boundary model refuted.
+**DMRG extension (Sprint 124):** Open-BC chi_F at n=6-20 (8 sizes). Pairwise alpha drifts UPWARD: 1.505->1.523. Power+1/N^2 corrected alpha_open=1.524+/-0.002. Log-corrected alpha=2 still worst fit (R^2=0.9997 vs 0.999999). **But drift direction is upward** -- consistent with eventual convergence to higher value (periodic 1.77 or log-corrected 2.0). Asymptotic regime needs L>>20 (likely L>100). iDMRG overlap method FAILED for S_q Potts (non-abelian symmetry). **S132 caveat:** periodic exact-diag drifts DOWN (1.85->1.78 at n=12), open DMRG drifts UP (1.51->1.52) and sits far lower (~1.52 vs ~1.78) -- opposite directions, big BC effect; do not assume open "converges upward to periodic/2.0". Reconcile (subtract boundary term / matched sizes). **S133 UPDATE:** the open "drifts up monotonically" reading is WRONG -- canonical exact-diag (matched convention, n=4..12) shows open kappa_eff DIPS to a min 1.520 at n~7.5 then rises (DMRG started at n=6, near the min, and missed the descent). The S124 DMRG values used forward/dg=1e-3 (~1/2 the canonical magnitude; exponent unaffected). **S134 UPDATE (supersedes the S133 dip reading):** S124/S133 open χ_F were at FIXED g_c=1/q, deep off the open chain's own peak (g*≈0.22 at n=12, vs g_c=0.25; χ_peak 3–5×). At the peak, open κ_eff rises MONOTONICALLY (no dip) — the S133 dip was the off-peak penalty. Open DMRG "drifts up" is the on-peak ascent seen through the fixed-g_c penalty; both BC on-peak ascend toward 2.0. Periodic-at-the-peak (DMRG) past L=12 is the way to pin the asymptote — see "WRONG-SIGN TENSION RESOLVED (S134)" above.
 
 ### Hybrid model findings — CLOSED (Sprint 128e)
 Sprint 065 confirmed hybrid ≠ clock, Sprint 076 confirmed hybrid ≠ S_q Potts. Sprints 119-121: chi_F spectral decomposition confirms continuous transitions for q>=5 and walking->continuous boundary at q_cross=3.58. **Sprint 128e:** Power law wins for q<=4, logarithmic chi_F ~ A*(ln N)^beta wins for q>=6 (dAIC=20 at q=6), marginal at q=5. This is consistent with BKT-class transitions at large q. Thread closed — no further compute needed.
