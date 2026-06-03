@@ -7,8 +7,8 @@
 - **~~Understand χ_F mechanism~~** DONE (Sprint 106). α = β_me + 2z_m - 1. Single multiplet dominates. Spectral gap symmetry-forbidden.
 - **~~Harden χ_F mechanism~~** DONE (Sprint 107). 5 sizes at q=5, cross-validated. CONFIRMED NOVEL.
 - **~~Log corrections to α(q)~~** CORRECTED (Sprint 109). Sprint 108's 1/ln(N) extrapolation was WRONG for q=2,3. Power-law 1/N² corrections recover exact ν: q=2→α_∞=1.00 (exact 1.0), q=3→α_∞=1.40 (exact 7/5). Walking (q≥5) zero corrections confirmed. q=4 BKT genuinely slow (neither model converges at accessible sizes).
-- **KNOWLEDGE.md is over budget (~560 lines vs ~200 target).** Compress old sections into one-line summaries.
-- **Hardware validation** — 580s QPU unused for 89 sprints. Strongest prediction: q=2 Ising χ_F at g_c, or Heisenberg chain c_eff on 5-10 qubits.
+- **Hardware validation** — 580s QPU unused for ~90 sprints (BLOCKED: ~/.qiskit/qiskit-ibm.json empty). Strongest prediction: q=2 Ising χ_F at g_c, or Heisenberg chain c_eff on 5-10 qubits.
+- **CHANGELOG.md is over budget (511 lines vs 300 trigger).** Compress sprints older than the last ~10 into one-line summaries. (KNOWLEDGE.md itself is fine at ~130 lines — the old "560-line" note was stale, removed S131.)
 
 ## Five Entanglement Archetypes
 | Archetype | Example | MI pattern | I3 sign | Negativity | Source |
@@ -83,17 +83,17 @@ and q=3→1/ν=1.2, no marginal op):
 - Methodological nugget: self-locating peak-HEIGHT is the lowest-bias accessible-size estimator of
   2/ν−d (≤1.3% at q=2,3), better than fixed-g_c (overshoots +0.07). Full report: sprints/sprint_130.md.
 
-### chi_F effective exponents (Sprints 127-128, exact chi_F; see Sprint 129 caveat above)
+### chi_F effective exponents (Sprints 127-131, exact chi_F; see Sprint 129 caveat above)
 
 | q | Hybrid alpha | S_q alpha (effective) | # sizes (S_q) | Pairwise drift (S_q) |
 |---|-------------|-----------|---------------|---------------------|
 | 3 | 1.481+/-0.014 | 1.468+/-0.012 | 6 (n=4-14) | Decreasing (1.57->1.44) |
 | **4** | **1.549+/-0.012** | **1.794+/-0.011** | 6 (n=4-11) | Oscillating ~1.79 |
-| 5 | 1.352+/-0.043 | **2.139+/-0.019** | 5 (n=4-10) | Increasing |
+| 5 | 1.352+/-0.043 | **2.094+/-0.002** | 5 (n=4-10) | Increasing (S131 fix) |
 | **6** | **1.186+/-0.038** | **2.375+/-0.006** | 6 (n=4-9) | Increasing (2.35->2.40) |
-| 7 | 0.971+/-0.058 | 2.584+/-0.015 | 4 (n=4-8) | Noisy |
+| 7 | 0.971+/-0.058 | **2.636+/-0.018** | 4 (n=4-8) | Increasing (2.58->2.67, S131 fix) |
 
-S_q alpha(q) effective exponents increase with q (walking for q>=5). **q=5 is recorded INCONSISTENTLY** as 2.139+/-0.019 here vs 2.094+/-0.002 in the extrapolation/S127 — RECONCILE (Sprint 129). The alpha(q) functional form (log vs quadratic-in-ln q) is unsettled and not load-bearing.
+S_q alpha(q) effective exponents increase with q (walking for q>=5). **q=5 and q=7 RECONCILED (Sprint 131):** canonical = results.db `alpha_exact` (q=5 -> 2.094+/-0.002, q=7 -> 2.636+/-0.018; raw chi_F reproduced CPU-vs-GPU to 4.8e-9). The prior 2.139/2.584 were stale sprint-128 alpha(q)-table transcriptions, reproduced by NO standard fit (full/subset, linear/log-space all give 2.09/2.64); sprint-127.md and CHANGELOG already held the correct values. With the corrected points the effective-exponent curve is **convex in ln q** (local slopes 1.14, 1.34, 1.54, 1.69 monotonically increasing; quadratic adds +0.44(ln q)^2, chi2/dof->0), i.e. super-logarithmic — not the "nearly linear / alpha~1.34 ln q" of sprint 128 (that near-linearity was the artifact). Functional form remains **not load-bearing**: q=3,4 are finite-size *effective* exponents whose asymptotes are 2/nu-d (1.40, 2.0), so the curve mixes the continuous-transition and walking regimes.
 
 **Asymptotic extrapolation (Sprint 128c) — RETRACTED as evidence against logs (Sprint 129).** The ansatz alpha_eff(N)=alpha_inf+c/N^p has NO log term, so it cannot detect log corrections: fed synthetic true-alpha=2-with-Salas-Sokal-logs data it returns alpha_inf=1.60-1.89. Its q=3 "validation" is a non-sequitur (q=3 has no marginal operator). So q=4 alpha_inf=1.771 is NOT evidence that the asymptote is below 2.
 

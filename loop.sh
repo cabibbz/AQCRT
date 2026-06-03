@@ -29,7 +29,7 @@ for i in $(seq 1 $SPRINTS); do
         --model claude-opus-4-8 \
         --dangerously-skip-permissions \
         --verbose \
-        --max-turns 30 \
+        --max-turns 3000 \
         2>&1 | tee -a "logs/loop-$TIMESTAMP.log"
     
     EXIT_CODE=$?
