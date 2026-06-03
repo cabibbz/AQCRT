@@ -9,7 +9,8 @@
 - **~~Log corrections to α(q)~~** CORRECTED (Sprint 109). Sprint 108's 1/ln(N) extrapolation was WRONG for q=2,3. Power-law 1/N² corrections recover exact ν: q=2→α_∞=1.00 (exact 1.0), q=3→α_∞=1.40 (exact 7/5). Walking (q≥5) zero corrections confirmed. q=4 BKT genuinely slow (neither model converges at accessible sizes).
 - **Hardware validation** — 580s QPU unused for ~90 sprints (BLOCKED: ~/.qiskit/qiskit-ibm.json empty). Strongest prediction: q=2 Ising χ_F at g_c, or Heisenberg chain c_eff on 5-10 qubits.
 - **CHANGELOG.md is over budget (~445 lines vs 300 trigger).** Compress sprints older than the last ~10 into one-line summaries. (KNOWLEDGE.md ~160 lines — the S132/S133 q=4 blocks were consolidated into one S134 block this sprint.)
-- **q=4 χ_F asymptote (active):** on-peak peak-height κ_eff ascends toward 2/ν−d=2.0; **S135 pushed OPEN on-peak χ_F to n=24 via DMRG** (κ_eff 0.66→1.49, monotone, no plateau) and **DETECTED the marginal-operator log in χ_F**: a no-log surface fit κ=K+d/L recovers the q=3 control null EXACTLY (K=1.401) but gives K=1.70 at q=4 (undershoot=the log), and a fixed-null 2.0+s/lnL+d/L fit needs s≈−1.26 (q3: s≈0). Asymptote still NOT pinned at L≤24 (slow log; open surface term blocks a clean 1/lnL pin — naive/free fits overshoot, q3→1.94). Next: periodic past n=12 (TeNPy finite-periodic hard) or L≫24. See STATE.md.
+- **q=4 χ_F asymptote (thread now near-closed):** on-peak peak-height κ_eff ascends toward 2/ν−d=2.0; S135 pushed OPEN on-peak χ_F to n=24 via DMRG (κ_eff 0.66→1.49) and DETECTED the marginal-operator log in χ_F (q3 control s≈0, q4 s≈−1.26). Asymptote NOT numerically pinned at L≤24 (slow log + open surface term). **S136 CROSS-CHECKED the q=4 marginal log via a NEW χ_F-independent observable** (thermal-gap exceptional point: 1/ν_eff climbs to 1.5 from below) — two observables now agree. Pinning the χ_F asymptote would need periodic-BC DMRG past n=12 (TeNPy finite-periodic hard) or L≫24; LOW ROI — thread effectively closed.
+- **Walking saturation via thermal-gap EP (active, S136):** Im(g_EP) gives a smooth 1/ν_eff(q) (q2..7: 0.95,1.17,1.35,1.51,1.65,1.78); q≥5 are the complex-CFT "conformal shadow" (still climbing, no crossover at L<ξ). The definitive walking test (power-law→faster crossover at L≳ξ>12) needs **Z_q-conserving DMRG to L≫12** for the charge-0 excited state. See STATE.md.
 
 ## Five Entanglement Archetypes
 | Archetype | Example | MI pattern | I3 sign | Negativity | Source |
@@ -128,6 +129,27 @@ q=4 n=8..24, q=3 n=8..24 (sprint 135).
   ⇒ unreliable; only the proven-null-fixed and the no-log-control fits are trustworthy. **Asymptote NOT pinned**
   at L≤24 (slow log; open surface 1/L term prevents a clean 1/lnL pin). POTENTIALLY NOVEL (modest): χ_F
   marginal-log for 4-state Potts chain, isolated by the q=3 control. unpublished/sprint_135.md.
+
+### ✓ NEW OBSERVABLE — thermal-gap exceptional point Im(g_EP); q=4 marginal log cross-checked off χ_F (Sprint 136)
+**PIVOT off the χ_F thread.** New g_c-free, χ_F-independent estimator of the THERMAL exponent 1/ν from the
+Z_q-charge-0 thermal gap Δ_ε(g)=E₁−E₀ (charge filter P=∏X_i, ⟨v|P|v⟩≈+1) on the PERIODIC chain. At the gap
+minimum g*(L) the two charge-0 levels form a 2-level avoided crossing ⇒ the nearest complex-g coalescence
+(exceptional point / quantum Fisher zero) sits at **Im(g_EP)=√(Δ_min/Δ_ε″)** (real-axis-only). Validated
+vs a true complex-symmetric diagonalization H(g*+iy) at q=2 (~2%). DB: `im_gEP`,`thermal_gap_min`,
+`gstar_thermal` (q2..7, per n); `imEP_exponent` (power-fit p). exp_136a/b, exp_136_analysis.
+- **Recovers exact 1/ν (validation):** local slope of Im(g_EP)~L^{−1/ν} → q2=**1.0** (p=0.95), q3=**1.2**
+  (p=1.17). Δ_min·L→2πv·x_ε (CFT const). A second independent ν route besides χ_F-collapse (S130).
+- **q=4 INDEPENDENT marginal-log confirmation:** 1/ν_eff climbs MONOTONE from below toward 1.5
+  (slopes 1.336→1.369, p=1.354 < 1.5) and Δ_min·L drifts down 3.68→3.49 — the SAME marginal-operator
+  suppression the χ_F thread (S129–135) found, now in a totally different observable. **Two observables agree**
+  (novelty-hardening #2): q=4's finite-size exponent sits below its asymptote because of the c=1 marginal op.
+- **Walking q=5,6,7 = complex-CFT "conformal shadow":** effective 1/ν_eff rises smoothly across q=4:
+  **1.51, 1.65, 1.78** (still climbing with L; slopes don't settle, unlike q≤3), steeper/more persistent for
+  larger q (ξ_q shrinks). The GRZ complex fixed point's thermal exponent continued analytically through q=4.
+- **No plateau:** sat-fit γ+A·L^{−p} gives γ=0 ∀q (Im(g_EP)→0 for all; the walking signal is the SCALING
+  crossover power-law→faster at L≳ξ, NOT a γ>0 plateau — I corrected my pre-data guess). q=5 ξ>12 ⇒ the
+  crossover is BEYOND exact diag; **needs Z_q-conserving DMRG to L≫12** (clean next step). POTENTIALLY NOVEL
+  (modest/methodological): quantum-chain thermal-gap-EP 1/ν estimator + complex-CFT shadow map. unpublished/sprint_136.md.
 
 ### chi_F effective exponents (Sprints 127-131, exact chi_F; see Sprint 129 caveat above)
 
