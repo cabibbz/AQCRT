@@ -40,22 +40,30 @@ for i in $(seq 1 $SPRINTS); do
         exit 1
     fi
 
-    # --- the sprint (forensic per-sprint NDJSON; stream-json so headless output IS captured) ---
+    # --- the sprint ---
+    # raw NDJSON -> per-sprint .jsonl (forensic, machine-parseable);  stderr -> .err;
+    # stdout -> live, readable VERBOSE view via format_stream.py (thinking, every tool call +
+    # inputs, tool results, per-turn tokens). Set STREAM_FULL=1 for untruncated thinking/results.
     SPRINT_LOG="logs/sprint-$i-$TIMESTAMP.jsonl"
+    SPRINT_ERR="logs/sprint-$i-$TIMESTAMP.err"
     claude -p "ultrathink. Follow the instructions in TASK.md." \
         --model claude-opus-4-8 \
         --dangerously-skip-permissions \
         --output-format stream-json \
         --verbose \
         --max-turns 3000 \
-        2>&1 | tee "$SPRINT_LOG"
+        2> "$SPRINT_ERR" \
+        | tee "$SPRINT_LOG" \
+        | python -u experiments/format_stream.py
 
-    # PIPESTATUS[0] = claude's exit (NOT tee's), so retry logic actually sees real failures
+    # PIPESTATUS[0] = claude's exit (NOT tee's / formatter's), so retry logic sees real failures
     EXIT_CODE=${PIPESTATUS[0]}
     echo "[sprint $i] exit=$EXIT_CODE at $(date) -> $SPRINT_LOG" | tee -a "logs/loop-$TIMESTAMP.log"
 
     if [ $EXIT_CODE -ne 0 ]; then
-        echo "!!! Sprint $i exited with code $EXIT_CODE — pausing 60s before next"
+        echo "!!! Sprint $i exited with code $EXIT_CODE — last stderr (full: $SPRINT_ERR):"
+        tail -n 20 "$SPRINT_ERR"
+        echo "pausing 60s before next"
         sleep 60
     fi
 
