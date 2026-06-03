@@ -1,0 +1,48 @@
+{
+  "experiment": "132a_gpu_validation",
+  "sprint": 132,
+  "timestamp": "2026-06-02 22:27:09",
+  "gpu_status": "GPU enabled (CuPy 13.6.0, device NVIDIA TITAN RTX)",
+  "gpu_enabled": true,
+  "reproduction": [
+    {
+      "n": 9,
+      "dim": 262144,
+      "chi_F_gpu": 56.183728352415194,
+      "db_ref": 56.183728,
+      "reldiff": 6.272549093568299e-09,
+      "pass": true,
+      "time_s": 0.9
+    },
+    {
+      "n": 10,
+      "dim": 1048576,
+      "chi_F_gpu": 67.78420078012992,
+      "db_ref": 67.784201,
+      "reldiff": 3.2436773009593464e-09,
+      "pass": true,
+      "time_s": 3.0
+    },
+    {
+      "n": 11,
+      "dim": 4194304,
+      "chi_F_gpu": 80.31087529750377,
+      "db_ref": 80.310875,
+      "reldiff": 3.70440210624711e-09,
+      "pass": true,
+      "time_s": 13.5
+    }
+  ],
+  "cpu_vs_gpu": {
+    "n": 9,
+    "dim": 262144,
+    "chi_F_cpu": 56.183728357349516,
+    "chi_F_gpu": 56.183728312940595,
+    "reldiff": 7.90423175595413e-10,
+    "pass": true,
+    "t_cpu_s": 3.3,
+    "t_gpu_s": 0.4,
+    "speedup": 9.2
+  },
+  "all_pass": true
+}
