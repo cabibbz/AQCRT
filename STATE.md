@@ -1,47 +1,48 @@
 # Current State -- Rewrite this completely each sprint
 
 ## Last Sprint
-Sprint 131 -- DATA-INTEGRITY FIX (not novel): reconciled the S_q chi_F walking exponents q=5, q=7.
-Report: sprints/sprint_131.md. Data: results/sprint_131{a,b}*.json.
-- **Canonical: q=5 -> 2.094+/-0.002, q=7 -> 2.636+/-0.018** (= results.db `alpha_exact`; sprint-127.md &
-  CHANGELOG were already correct). KNOWLEDGE.md's 2.139 / 2.584 were stale sprint-128 alpha(q)-table
-  transcriptions, reproduced by NO standard fit. Raw chi_F recomputed CPU-vs-GPU: max rel diff 4.8e-9.
-- Downstream: corrected alpha(q) effective curve is **convex in ln q** (slopes 1.14,1.34,1.54,1.69 monotone
-  up), super-log -- not S128's "nearly linear". NOT load-bearing (q=3,4 are finite-size effective exps;
-  curve mixes regimes). DB unchanged (already canonical); only KNOWLEDGE.md was wrong.
+Sprint 132 -- **GPU RESTORED + q=4 n=12 frontier reached.** sprints/sprint_132.md (also unpublished/);
+results/sprint_132{a-e}*.json.
+- GPU fix: pinned **cupy-cuda12x 13.6.0** + numpy==1.26.4 (14.0.1 needed numpy>=2 = the ABI break).
+  Bit-faithful (q=4 n=9/10/11 reproduce DB ~1e-9; CPU-vs-GPU 8e-10). **chi_F(q=4 n=12)=93.747642** (59.9s).
+- **Finding (POTENTIALLY NOVEL, hardens S128/129 chi_F-q=4 flag):** full n=4..12 power-law alpha=1.790;
+  pairwise local exp DECREASES 1.846->1.778, moving AWAY from null 2.0 (|gap| 0.154->0.222) -- wrong-sign
+  for a marginal-log climb to 2. Non-circular (132d synthetic recovery: true-2.0+log gives *increasing*
+  local exp; data decrease). q=3 control (132e): q=3 descends ONTO null 1.40, q=4 away from 2.0. NOT a
+  refutation of 2.0 -- asymptote NOT quoted (q=3 calibrates 1/lnN extrap unreliable: fabricates -0.18 vs
+  true 0). Robust claim = TREND DIRECTION only.
 
-## CRITICAL: q=4 reframing CONFIRMED (Sprint 130) -- load-bearing, unchanged
-- Data collapse: 1/nu(q=4)=1.49 after q=2,3 calibration => **nu=2/3 confirmed.**
-- Peak-HEIGHT exp recovers 2/nu-d to <=1.3% at q=2,3; q=4=1.747 (12.7% below 2.0) = physical marginal log.
-  nu=2/3 + Albuquerque => amplitude exp **must ->2**; measured ~1.77-1.81 is finite-size.
-- Peak-SHIFT exp UNUSABLE for nu (correction-dominated). Dead end, do not revisit.
-
-## CRITICAL: Standing corrections (unchanged)
-Use EXACT finite-difference / curve chi_F (spectral has negative-alpha bias, S126). g_c=1/q exact
-self-dual. All sprints 076+ use the STANDARD S_q Potts model (not a novel hybrid; Apr 2026 audit).
+## CRITICAL: standing framework (unchanged, respected this sprint)
+- nu(q=4)=2/3 CONFIRMED (S130 collapse) + Albuquerque 2/nu-d=2 (proven identity) => theoretical leading
+  exp is **2.0**. Golden test gate enforces this; do NOT record "q=4 asymptote=1.78, reject 2" (S129).
+- Use EXACT finite-diff chi_F (chif_utils canonical: per-site, factor-2, dg=1e-4, g_c=1/q). Spectral
+  chi_F has neg-alpha bias (S126). All sprints 076+ are the STANDARD S_q Potts (not a novel hybrid).
 
 ## Active Research Thread
-S_q q=4 per-site chi_F: nu=2/3 => asymptote 2/nu-d=2; finite-size effective ~1.77-1.81 (marginal log).
-Remaining piece: watch amplitude exponent climb past 1.8 toward 2 at L>>11 (needs GPU).
+q=4 per-site chi_F: theory says leading exp 2.0; measured effective exp ~1.78 (L<=12) and its trend is
+moving AWAY from 2.0, not toward it. Tension is now SHARP (was "indistinguishable" at L<=11, S129).
+Resolving it needs to beat the BC problem (below) or reach L>>12.
 
 ## QPU Budget
-580s remaining -- BLOCKED (~/.qiskit/qiskit-ibm.json empty).
+580s remaining -- BLOCKED (~/.qiskit/qiskit-ibm.json empty). ~90+ sprints unused. Strongest sim
+prediction for HW: q=2 Ising chi_F at g_c on 5-10 qubits. Needs credentials restored.
 
 ## Top 3 Next Experiments
-1. **(GPU) periodic-BC chi_F q=4 n=12-14** -- watch amplitude exp 1.8->2.0. Core blocker; CPU can't reach
-   (q=4 n=12 = 16.7M). BLOCKED until CuPy/CUDA restored.
-2. **CHANGELOG.md compression** (511 > 300 trigger) -- compress sprints older than last ~10. Housekeeping.
-3. **results.db chi_F factor-2 convention split** -- pick one canonical normalization. Prefactor cancels
-   in exponents (independent of alpha claims) => low priority / safe to defer.
+1. **Reconcile periodic-vs-open BC at q=4 (THE asymptote blocker).** Periodic exact drifts DOWN to 1.78;
+   open-BC DMRG (S124) drifts UP to ~1.52 -- opposite direction AND far lower. Isolate the boundary
+   contribution (open-BC exact diag at small n vs periodic; or subtract surface term) so the two BCs can
+   be compared. Until reconciled the L->inf asymptote is unknowable.
+2. **Cross-check the wrong-sign trend with an INDEPENDENT observable.** S130 peak-HEIGHT amplitude exp
+   (1.75, also <2) already agrees; extend it + the gap/z_m decomposition to L=12 (GPU) and ask if it too
+   moves away from 2. Two independent probes agreeing = robust.
+3. **CHANGELOG.md compression** (511 > 300 trigger) -- compress sprints older than last ~10. Housekeeping.
 
 ## Ruled Out / Retracted
-- q=5/q=7 alpha "inconsistency" RESOLVED (S131): 2.094 / 2.636 canonical; 2.139 / 2.584 stale.
-- Peak-SHIFT FSS of chi_F: correction-dominated, useless for nu (S130). Dead end.
-- ~~q=4 alpha=1.77 asymptotic / Salas-Sokal rejected~~ INVERTED (S129); 2 correct, 1.77 finite-size.
-- exp_128c no-log extrapolation as anti-log evidence: circular (S129). Spectral chi_F primary (S126).
-  iDMRG overlap for S_q (S124).
+- n=13 (q=4, 67M) infeasible: int64 CSR ~42GB > 24GB GPU. n=12 is the exact-diag frontier; beyond => DMRG.
+- 1/lnN / no-log extrapolations of chi_F local exp: UNRELIABLE for the asymptote (q=3 control S132
+  fabricates -0.18 deficit where truth=0). Use only for trend DIRECTION. (q=5/7 RESOLVED S131; peak-SHIFT dead S130.)
 
 ## Key Tools
-chi_F curve scan/peak/collapse: experiments/collapse_utils.py (S130). Exact chi_F (periodic): q=3
-n<=12(CPU)/14(GPU), q=4 n<=10(CPU)/11(GPU), q=5 n<=10(GPU). fss_utils.py, hamiltonian_utils.py,
-gpu_utils.py, db_utils.py. IBM QPU 580s (credentials needed).
+GPU restored: `from gpu_utils import eigsh` (auto-GPU dim>50k, cupy 13.6.0). chif_utils.chi_F_exact (canonical),
+collapse_utils (S130), fss_utils, hamiltonian_utils, db_utils. Exact chi_F GPU reach: q=3 n<=14, q=4 n<=12,
+q=5 n<=10. Pre-sprint BLOCKING gates: test_golden.py + db_check.py.

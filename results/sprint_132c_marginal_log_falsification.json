@@ -1,0 +1,164 @@
+{
+  "experiment": "132c_marginal_log_falsification",
+  "sprint": 132,
+  "timestamp": "2026-06-02 22:34:47",
+  "sizes": [
+    4,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "chi_F": [
+    12.839321,
+    27.13803,
+    45.527791,
+    56.183728,
+    67.784201,
+    80.310875,
+    93.747642
+  ],
+  "probe1_local_exponent": {
+    "pairs": [
+      {
+        "n1": 4,
+        "n2": 6,
+        "midN": 4.898979485566356,
+        "alpha_loc": 1.8458398391727413,
+        "dlnL2": -0.1541601608272587,
+        "d_alpha_loc": null
+      },
+      {
+        "n1": 6,
+        "n2": 8,
+        "midN": 6.928203230275509,
+        "alpha_loc": 1.798467527416951,
+        "dlnL2": -0.20153247258304896,
+        "d_alpha_loc": -0.047372311755790264
+      },
+      {
+        "n1": 8,
+        "n2": 9,
+        "midN": 8.48528137423857,
+        "alpha_loc": 1.7855223863810943,
+        "dlnL2": -0.21447761361890572,
+        "d_alpha_loc": -0.012945141035856755
+      },
+      {
+        "n1": 9,
+        "n2": 10,
+        "midN": 9.486832980505138,
+        "alpha_loc": 1.7815209560461918,
+        "dlnL2": -0.21847904395380824,
+        "d_alpha_loc": -0.004001430334902523
+      },
+      {
+        "n1": 10,
+        "n2": 11,
+        "midN": 10.488088481701515,
+        "alpha_loc": 1.7792002656656178,
+        "dlnL2": -0.22079973433438216,
+        "d_alpha_loc": -0.00232069038057392
+      },
+      {
+        "n1": 11,
+        "n2": 12,
+        "midN": 11.489125293076057,
+        "alpha_loc": 1.7779453269752992,
+        "dlnL2": -0.22205467302470083,
+        "d_alpha_loc": -0.0012549386903186743
+      }
+    ],
+    "marginal_log_ansatz": {
+      "a_inf": 1.6428621417687865,
+      "B": 0.3149926259544959,
+      "ssr": 0.00013889042623102378,
+      "note": "a_inf should be 2.0 if leading power is 2"
+    },
+    "power_corr_ansatz": {
+      "a_inf": 1.7205937428156457,
+      "C": 0.5900140596343343,
+      "ssr": 0.00014054811804522585
+    },
+    "dlnL2_first": -0.1541601608272587,
+    "dlnL2_last": -0.22205467302470083
+  },
+  "probe2_models": [
+    {
+      "model": "pure_power",
+      "k": 2,
+      "ssr_log": 0.00019162683158922188,
+      "aic": -69.54109568174418,
+      "alpha_loc_12": 1.8078647961283778,
+      "alpha_loc_1000": 1.8078647961328187,
+      "params": [
+        0.05370075618907048,
+        1.8078647961265206
+      ],
+      "label": "{a}=1.8079"
+    },
+    {
+      "model": "power_plus_1overN",
+      "k": 3,
+      "ssr_log": 2.643933610244028e-06,
+      "aic": -97.52407026454783,
+      "alpha_loc_12": 1.7670903345745614,
+      "alpha_loc_1000": 1.7218451817146985,
+      "params": [
+        0.30728027761504983,
+        1.7213196972051528,
+        -0.5252085187040019
+      ],
+      "label": "a=1.7213 c=-0.525"
+    },
+    {
+      "model": "leading2_marg_log",
+      "k": 3,
+      "ssr_log": 0.00019915958884428756,
+      "aic": -67.2711997478789,
+      "alpha_loc_12": 1.8089155560740977,
+      "alpha_loc_1000": 1.8166168011291006,
+      "params": [
+        0.05694445285467552,
+        0.009724540129658933,
+        20.124542198669555
+      ],
+      "label": "b=0.0097 r=20.1245"
+    },
+    {
+      "model": "free_power_x_logpow",
+      "k": 3,
+      "ssr_log": 3.1210243971693326e-06,
+      "aic": -96.36281598662997,
+      "alpha_loc_12": 1.766060370456124,
+      "alpha_loc_1000": 1.6809134678652526,
+      "params": [
+        0.18095831460945278,
+        1.633075044686759,
+        0.33045612013836934
+      ],
+      "label": "a=1.6331 p=0.3305"
+    },
+    {
+      "model": "leading2_logpow",
+      "k": 2,
+      "ssr_log": 0.0008281182605583568,
+      "aic": -59.29585315250259,
+      "alpha_loc_12": 1.855736184954715,
+      "alpha_loc_1000": 1.9481043988012203,
+      "params": [
+        -0.08962315464334468,
+        -0.3584821131468195
+      ],
+      "label": "p=-0.3585"
+    }
+  ],
+  "verdict": {
+    "aic_best": "power_plus_1overN",
+    "dlnL2_converges_to": -0.22205467302470083,
+    "marg_log_ainf": 1.6428621417687865,
+    "interpretation": "alpha_loc decreases monotonically and dlnL2=alpha_loc-2 converges to a nonzero constant ~-0.222 rather than flattening to 0; the marginal-log ansatz alpha_loc=a_inf+B/lnN returns a_inf=1.643 (NOT 2). The leading-2 forms cannot reproduce the observed downward local-exp trend without unphysical-sign couplings. The data behave as a genuine power N^1.721 at all reachable sizes; rescuing a=2 needs an unobserved turnaround beyond L=12."
+  }
+}

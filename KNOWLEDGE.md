@@ -83,12 +83,32 @@ and q=3→1/ν=1.2, no marginal op):
 - Methodological nugget: self-locating peak-HEIGHT is the lowest-bias accessible-size estimator of
   2/ν−d (≤1.3% at q=2,3), better than fixed-g_c (overshoots +0.07). Full report: sprints/sprint_130.md.
 
+### ⚠ q=4 n=12 FRONTIER (Sprint 132) — trend is WRONG-SIGN for marginal-log->2; tension sharpened
+GPU restored (cupy-cuda12x 13.6.0, numpy 1.26.4 pinned). First q=4 point past the CPU wall:
+**chi_F(n=12, dim 16.78M) = 93.747642** (periodic, g_c=1/q, dg=1e-4). Full n=4..12 power law alpha=1.790.
+Pairwise local exponent **DECREASES monotonically** 1.846->1.799->...->**1.778** with shrinking
+decrements, moving AWAY from null 2.0 (|gap| GROWS 0.154->0.222). A single marginally-irrelevant (1/lnL)
+or additive log on leading power 2.0 FORCES alpha_loc to *increase* toward 2 -- verified by synthetic
+recovery (exp_132d): a true 2.0xmarg-log endpoint-matched to our data gives *increasing* 1.773->1.853;
+real data decrease (RMS local-exp dist 0.060 vs 0.005 for a genuine power). So the diagnostic is
+NON-circular (unlike a no-log chi-extrapolation, S129) and the data fall on the a<2 side.
+**q=3 CONTROL (exp_132e, n=4..14):** q=3 has no marginal op (null 1.40); its local exp descends ONTO
+1.40 (|gap| SHRINKS 0.168->0.037). Opposite of q=4 (descends AWAY from 2.0). BUT the control also
+calibrates the 1/lnN gap-extrapolation as **unreliable** -- it fabricates g_inf=-0.18 for q=3 where
+the true deficit is 0. **So DO NOT quote a q=4 asymptote (~1.72-1.78 is the *observed-window* effective
+exp, not a limit).** Robust claim = TREND DIRECTION only. NOT a refutation of 2.0: nu=2/3 (S130 collapse)
++ Albuquerque (2/nu-d=2, proven) still predict leading 2; a non-monotone correction with a turnaround at
+L>>12 can't be excluded (no sign of one); 1/lnL=0.40 at L=12 (far from asymptopia).
+**Open vs periodic tension:** open-BC DMRG (S124) drifts UP 1.505->1.523 (opposite direction, ~1.52<<1.78)
+=> large BC-dependent finite-size effects; periodic exact-diag is the cleaner bulk probe. Reconcile next.
+POTENTIALLY NOVEL (hardens the S128/129 "no prior chi_F log at q=4" flag); unpublished/sprint_132.md.
+
 ### chi_F effective exponents (Sprints 127-131, exact chi_F; see Sprint 129 caveat above)
 
 | q | Hybrid alpha | S_q alpha (effective) | # sizes (S_q) | Pairwise drift (S_q) |
 |---|-------------|-----------|---------------|---------------------|
 | 3 | 1.481+/-0.014 | 1.468+/-0.012 | 6 (n=4-14) | Decreasing (1.57->1.44) |
-| **4** | **1.549+/-0.012** | **1.794+/-0.011** | 6 (n=4-11) | Oscillating ~1.79 |
+| **4** | **1.549+/-0.012** | **1.790+/-0.006** | 7 (n=4-12) | DECREASING 1.85->1.78 (S132) |
 | 5 | 1.352+/-0.043 | **2.094+/-0.002** | 5 (n=4-10) | Increasing (S131 fix) |
 | **6** | **1.186+/-0.038** | **2.375+/-0.006** | 6 (n=4-9) | Increasing (2.35->2.40) |
 | 7 | 0.971+/-0.058 | **2.636+/-0.018** | 4 (n=4-8) | Increasing (2.58->2.67, S131 fix) |
@@ -104,7 +124,7 @@ BUT: (1) "**Salas-Sokal p=3/2**" is **MISLABELED** — 3/2 is the 2D-classical s
 
 **g_c(hybrid):** q=2->0.250, q=3->0.333, q=4->0.393, q=5->0.438, q=6->0.474, q=7->0.535, q=10->0.684.
 
-**DMRG extension (Sprint 124):** Open-BC chi_F at n=6-20 (8 sizes). Pairwise alpha drifts UPWARD: 1.505->1.523. Power+1/N^2 corrected alpha_open=1.524+/-0.002. Log-corrected alpha=2 still worst fit (R^2=0.9997 vs 0.999999). **But drift direction is upward** -- consistent with eventual convergence to higher value (periodic 1.77 or log-corrected 2.0). Asymptotic regime needs L>>20 (likely L>100). iDMRG overlap method FAILED for S_q Potts (non-abelian symmetry).
+**DMRG extension (Sprint 124):** Open-BC chi_F at n=6-20 (8 sizes). Pairwise alpha drifts UPWARD: 1.505->1.523. Power+1/N^2 corrected alpha_open=1.524+/-0.002. Log-corrected alpha=2 still worst fit (R^2=0.9997 vs 0.999999). **But drift direction is upward** -- consistent with eventual convergence to higher value (periodic 1.77 or log-corrected 2.0). Asymptotic regime needs L>>20 (likely L>100). iDMRG overlap method FAILED for S_q Potts (non-abelian symmetry). **S132 caveat:** periodic exact-diag drifts DOWN (1.85->1.78 at n=12), open DMRG drifts UP (1.51->1.52) and sits far lower (~1.52 vs ~1.78) -- opposite directions, big BC effect; do not assume open "converges upward to periodic/2.0". Reconcile (subtract boundary term / matched sizes).
 
 ### Hybrid model findings — CLOSED (Sprint 128e)
 Sprint 065 confirmed hybrid ≠ clock, Sprint 076 confirmed hybrid ≠ S_q Potts. Sprints 119-121: chi_F spectral decomposition confirms continuous transitions for q>=5 and walking->continuous boundary at q_cross=3.58. **Sprint 128e:** Power law wins for q<=4, logarithmic chi_F ~ A*(ln N)^beta wins for q>=6 (dAIC=20 at q=6), marginal at q=5. This is consistent with BKT-class transitions at large q. Thread closed — no further compute needed.

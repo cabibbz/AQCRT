@@ -1,0 +1,125 @@
+{
+  "experiment": "132e_q3_control",
+  "sprint": 132,
+  "timestamp": "2026-06-02 22:44:40",
+  "per_q": {
+    "3": {
+      "sizes": [
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "pairs": [
+        {
+          "n1": 4,
+          "n2": 6,
+          "alpha_loc": 1.5680325220355296,
+          "gap": 0.16803252203552965
+        },
+        {
+          "n1": 6,
+          "n2": 8,
+          "alpha_loc": 1.4961756988168233,
+          "gap": 0.09617569881682342
+        },
+        {
+          "n1": 8,
+          "n2": 10,
+          "alpha_loc": 1.4647999213115828,
+          "gap": 0.06479992131158285
+        },
+        {
+          "n1": 10,
+          "n2": 12,
+          "alpha_loc": 1.4476646669532118,
+          "gap": 0.04766466695321192
+        },
+        {
+          "n1": 12,
+          "n2": 14,
+          "alpha_loc": 1.437059481581053,
+          "gap": 0.03705948158105299
+        }
+      ],
+      "null": 1.4,
+      "toward_null": true,
+      "g_inf_unreliable": -0.1834968551532208,
+      "k": 0.5522713219473785
+    },
+    "4": {
+      "sizes": [
+        4,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "pairs": [
+        {
+          "n1": 4,
+          "n2": 6,
+          "alpha_loc": 1.845839889020574,
+          "gap": -0.15416011097942595
+        },
+        {
+          "n1": 6,
+          "n2": 8,
+          "alpha_loc": 1.7984675991184567,
+          "gap": -0.20153240088154334
+        },
+        {
+          "n1": 8,
+          "n2": 9,
+          "alpha_loc": 1.7855224303306803,
+          "gap": -0.21447756966931975
+        },
+        {
+          "n1": 9,
+          "n2": 10,
+          "alpha_loc": 1.7815208454158329,
+          "gap": -0.2184791545841671
+        },
+        {
+          "n1": 10,
+          "n2": 11,
+          "alpha_loc": 1.7792003450306073,
+          "gap": -0.2207996549693927
+        },
+        {
+          "n1": 11,
+          "n2": 12,
+          "alpha_loc": 1.7779452725401637,
+          "gap": -0.22205472745983634
+        }
+      ],
+      "null": 2.0,
+      "toward_null": false,
+      "g_inf_unreliable": -0.35713802386129534,
+      "k": 0.3149929952046475
+    }
+  },
+  "verdict": "Both local exponents decrease, but RELATIVE TO THEIR NULL they move oppositely: q=3 descends ONTO 1.40 (|gap| shrinks 0.168->0.037, no reversal needed), q=4 descends AWAY from 2.00 (|gap| GROWS 0.154->0.222 and saturates; reaching 2.0 would require a future REVERSAL with no sign of one). This is the extrapolation-free core of the result. The q=3 control ALSO calibrates the 1/lnN gap-extrapolation as unreliable (it fabricates a -0.18 deficit where the truth is 0), so we explicitly DECLINE to quote an asymptotic q=4 exponent -- consistent with the Sprint-129 circularity caveat. Claim is about the TREND DIRECTION, not the asymptote value.",
+  "summary": {
+    "3": {
+      "last_gap": 0.03705948158105299,
+      "first_gap": 0.16803252203552965,
+      "abs_gap_first": 0.16803252203552965,
+      "abs_gap_last": 0.03705948158105299,
+      "toward_null": true,
+      "g_inf_unreliable": -0.1834968551532208
+    },
+    "4": {
+      "last_gap": -0.22205472745983634,
+      "first_gap": -0.15416011097942595,
+      "abs_gap_first": 0.15416011097942595,
+      "abs_gap_last": 0.22205472745983634,
+      "toward_null": false,
+      "g_inf_unreliable": -0.35713802386129534
+    }
+  }
+}
