@@ -160,3 +160,24 @@ clean next experiment.
 - Albuquerque, Alet, Sire & Capponi, PRB 81, 064418 (2010) — per-site χ_F density ~ L^{2/ν−d} (the
   sister observable; this sprint cross-checks the q=4 marginal log it could not pin).
 
+
+---
+
+## AUDIT ADDENDUM (2026-06-09) — read before citing this sprint
+A 48-agent system audit (sprints/audit_2026-06-09.md) verified the numbers but corrected two framings:
+1. **"Two INDEPENDENT observables agree" is near-tautological.** The thermal-gap EP and on-peak
+   chi_F are dominated by the SAME single epsilon multiplet: the 2-level identity
+   chi_F^peak x Im(g_EP)^2 ~ const holds to ~2% across q and n, so agreement with the S129-135
+   chi_F story was expected BY CONSTRUCTION. Correct framing: a second ESTIMATOR of the same
+   low-energy eps-gap physics; the product-constancy itself (single-multiplet dominance) is the
+   clean quantitative result. Genuine independence requires a non-spectral observable.
+2. **q=4 "climbs exactly as a marginal operator demands" overstates discrimination.** 4-6 sizes
+   cannot distinguish s/lnL from generic L^-omega drift. Controlled statement: the undershoot at
+   matched n is 8.7% (q=4) vs 3.9%/0.9% (q=2/q=3 controls) -- 2-9x larger, CONSISTENT with the
+   marginal log. Falsifier at DMRG sizes: slope must follow 1.5 - c/lnL (pass ~1.44 by L~30).
+3. Minor: "sat-fit gamma=0 (+-1e-3) for EVERY q" -- gamma is pinned at the fit lower bound and
+   the q=2 error is +-0.013; the honest statement is "no detectable plateau".
+4. **Planning correction:** "xi>12 for q=5" was only a lower bound. Exact classical values:
+   xi_d(5)=2512, xi_d(6)=159, xi_d(7)=48, xi_d(8)=24, xi_d(10)=10.6 -- the q=5,6 DMRG crossover
+   hunt proposed in the conclusion is UNREACHABLE at n<=40; retargeted to q=8-10 (Sprint 137).
+   Also fixed in code: gap_curve diagonalized twice per g-point; edge-clamped minima now raise.

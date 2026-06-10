@@ -54,7 +54,13 @@ def gpu_status():
 def eigsh(A, k=6, which='SA', return_eigenvectors=True, **kwargs):
     """Drop-in replacement for scipy.sparse.linalg.eigsh.
     Uses GPU (CuPy) when matrix dimension > 50k and CuPy is available.
-    Falls back to CPU otherwise or on GPU error -- and SAYS SO (once) when it does."""
+    Falls back to CPU otherwise or on GPU error -- and SAYS SO (once) when it does.
+
+    NOTE on ordering: with return_eigenvectors=False, raw scipy returns eigenvalues
+    DESCENDING while CuPy returns them ASCENDING -- a silent sign-flip trap at the
+    50k backend switch. This wrapper therefore normalizes that path to ASCENDING
+    order on BOTH backends (audit 2026-06-09). The eigenvector path is unchanged
+    (callers index/sort as before)."""
     n = A.shape[0]
 
     if n > GPU_THRESHOLD and not _has_cupy:
@@ -71,11 +77,13 @@ def eigsh(A, k=6, which='SA', return_eigenvectors=True, **kwargs):
             else:
                 evals_gpu = _cp_eigsh(A_gpu, k=k, which=which,
                                        return_eigenvectors=False, **kwargs)
-                return cp.asnumpy(evals_gpu)
+                return np.sort(cp.asnumpy(evals_gpu))
         except Exception as e:
             # Do NOT silently swallow: a GPU error that falls back to CPU must be visible.
             _warn_once(f'gpu_err_{type(e).__name__}',
                        f"GPU eigsh failed at dim={n} ({type(e).__name__}: {e}); "
                        f"falling back to CPU.")
 
-    return cpu_eigsh(A, k=k, which=which, return_eigenvectors=return_eigenvectors, **kwargs)
+    if return_eigenvectors:
+        return cpu_eigsh(A, k=k, which=which, return_eigenvectors=True, **kwargs)
+    return np.sort(cpu_eigsh(A, k=k, which=which, return_eigenvectors=False, **kwargs))

@@ -36,8 +36,25 @@ def _get_conn():
     )''')
     return conn
 
+# Canonical model spellings (audit 2026-06-09): four spellings of the S_q Potts
+# family ('sq', 'sq_potts', 'S_q_potts', 'S_q_Potts') and hybrid_2D/hybrid_2d had
+# fragmented the DB so query(model=...) silently missed rows. record() now
+# canonicalizes on write; the existing rows were migrated the same day.
+_CANON_MODEL = {
+    'sq': 'sq_potts', 's_q_potts': 'sq_potts', 'sq_potts': 'sq_potts',
+    'hybrid_2d': 'hybrid_2d',
+}
+
+def canon_model(model):
+    """Canonical spelling for a model name (case-insensitive known aliases)."""
+    if model is None:
+        return None
+    return _CANON_MODEL.get(str(model).lower(), model)
+
 def record(sprint, model, q, n, quantity, value, error=None, method=None, notes=None):
-    """Record a measurement. Upserts: same (sprint, model, q, n, quantity) replaces old value."""
+    """Record a measurement. Upserts: same (sprint, model, q, n, quantity) replaces old value.
+    Model names are canonicalized (e.g. 'sq'/'S_q_Potts' -> 'sq_potts')."""
+    model = canon_model(model)
     conn = _get_conn()
     # Delete any existing row with same key
     conn.execute(
@@ -52,16 +69,20 @@ def record(sprint, model, q, n, quantity, value, error=None, method=None, notes=
 
 def query(quantity=None, q=None, model=None, n=None, sprint=None):
     """Query measurements. Returns list of tuples (id, sprint, model, q, n, quantity, value, error, method, notes).
-    All parameters are optional filters."""
+    All parameters are optional filters. Model filter is canonicalized like record().
+
+    Ordering is 'q, sprint ASC' so the common pattern {r[4]: r[6] for r in rows}
+    keeps the NEWEST sprint's value per n (audit 2026-06-09: DESC made that
+    pattern silently oldest-wins)."""
     conn = _get_conn()
     sql = 'SELECT * FROM measurements WHERE 1=1'
     params = []
     if quantity is not None: sql += ' AND quantity=?'; params.append(quantity)
     if q is not None: sql += ' AND q=?'; params.append(q)
-    if model is not None: sql += ' AND model=?'; params.append(model)
+    if model is not None: sql += ' AND model=?'; params.append(canon_model(model))
     if n is not None: sql += ' AND n=?'; params.append(n)
     if sprint is not None: sql += ' AND sprint=?'; params.append(sprint)
-    sql += ' ORDER BY q, sprint DESC'
+    sql += ' ORDER BY q, sprint ASC'
     rows = conn.execute(sql, params).fetchall()
     conn.close()
     return rows

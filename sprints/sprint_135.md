@@ -187,3 +187,16 @@ S129–S133 are fully accounted for (fixed-g_c artifact S134 + open surface term
 - Albuquerque, Alet, Sire & Capponi, PRB 81, 064418 (2010) — χ_F density ~ L^{2/ν−d}.
 
 
+
+---
+
+## AUDIT ADDENDUM (2026-06-09) — read before citing this sprint
+A 48-agent system audit (sprints/audit_2026-06-09.md) verified the data but hedged the headline:
+1. **"Marginal-operator LOG detected" is CONDITIONAL on the proven 2.0 asymptote.** At n<=24 the
+   no-log alternative (K=1.70 + surface term) fits equally well, and the log coefficient is
+   parametrization-unstable (s = -1.3..-1.8, not a sharp -1.26). The robust, model-independent
+   datum is the q4-vs-q3-control DEFICIT CONTRAST: q=4 shows a 0.30 deficit vs its null that the
+   q=3 control does not (s_q3 = +0.003).
+2. **Open rigor item:** production DMRG ran AT the chi=48 cap for every size, with convergence
+   verified only at n=12; the chi-doubling check at n=24 (chi=96, q=4 and q=3) is queued
+   (Sprint 137). DB notes said svd1e-10; the run used svd_min=1e-8 (DB notes corrected).

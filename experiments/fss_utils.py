@@ -26,7 +26,13 @@ def _power_law(x, A, alpha):
 
 
 def fit_power_law(sizes, values, errors=None):
-    """Fit y = A * N^alpha. Returns dict with alpha, alpha_err, A, A_err, r_squared."""
+    """Fit y = A * N^alpha. Returns dict with alpha, alpha_err, A, A_err, r_squared.
+
+    errors, if given, are ABSOLUTE 1-sigma uncertainties on values: they weight the
+    fit (1/err) and propagate into alpha_err via scale_covar=False. r_squared is
+    always computed from UNWEIGHTED residuals (audit 2026-06-09: it was previously
+    weighted-ss_res / unweighted-ss_tot, which returned garbage like -334 whenever
+    errors were supplied)."""
     sizes = np.asarray(sizes, dtype=float)
     values = np.asarray(values, dtype=float)
     # Initial guess from log-log polyfit
@@ -34,8 +40,10 @@ def fit_power_law(sizes, values, errors=None):
     model = Model(_power_law)
     params = model.make_params(A=np.exp(p[1]), alpha=p[0])
     weights = 1.0 / np.asarray(errors) if errors is not None else None
-    result = model.fit(values, params, x=sizes, weights=weights)
-    ss_res = np.sum(result.residual**2)
+    result = model.fit(values, params, x=sizes, weights=weights,
+                       scale_covar=(errors is None))
+    resid = values - result.eval(x=sizes)
+    ss_res = np.sum(resid**2)
     ss_tot = np.sum((values - values.mean())**2)
     r2 = 1 - ss_res / ss_tot if ss_tot > 0 else 0
     return {

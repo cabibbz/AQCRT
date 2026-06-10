@@ -12,9 +12,13 @@ multiplicative factor -> it cancels in every *exponent* (height, at-g_c, collaps
 even though the absolute chi_F is offset from the h->0 value. We only ever quote
 exponents, so this is harmless (verified on q=2: height exponent -> 1.0).
 
-chi_F convention: per-site, overlap-squared (same as exp_127a / peak_utils):
-    chi_F(mid) = (1 - <psi(g)|psi(g+h)>^2) / (h^2 * n).
-Constant prefactors are irrelevant for exponents and for the collapse shape.
+chi_F convention: per-site, overlap-squared, CANONICAL (central, factor-2):
+    chi_F(mid) = 2 * (1 - <psi(g)|psi(g+h)>^2) / (h^2 * n).
+AUDIT 2026-06-09: scan_curve previously returned HALF this (forward-diff, no
+factor 2) while chif_utils declares one canonical convention; it now matches
+canonical. Raw S130 curve values stored in results/sprint_130*.json are the
+old half-scale; every EXPONENT and collapse result is unaffected (global
+prefactors cancel), only absolute chi values doubled.
 
 Usage:
     from collapse_utils import scan_curve, peak_from_curve, chi_at, collapse_scan
@@ -39,7 +43,7 @@ def scan_curve(H_coup, H_field, n, gs):
     chi = np.empty(len(mids))
     for i in range(len(mids)):
         ov = float(np.dot(vecs[i], vecs[i + 1]))
-        chi[i] = (1.0 - ov * ov) / (h[i] * h[i] * n)
+        chi[i] = 2.0 * (1.0 - ov * ov) / (h[i] * h[i] * n)   # canonical factor-2
     return mids, chi
 
 

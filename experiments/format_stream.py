@@ -112,10 +112,17 @@ def main():
             print(c("2", line))
             sys.stdout.flush()
             continue
+        if not isinstance(ev, dict):
+            # valid JSON but not an event object (e.g. a bare string/number) -- the old
+            # handler crashed HERE on ev.get and killed the live view (audit 2026-06-09)
+            print(c("2", line))
+            sys.stdout.flush()
+            continue
         try:
             emit(ev)
         except Exception as e:
-            print(c("2", f"[format_stream: {type(e).__name__} on {ev.get('type')}: {e}]"))
+            et = ev.get("type") if isinstance(ev, dict) else type(ev).__name__
+            print(c("2", f"[format_stream: {type(e).__name__} on {et}: {e}]"))
         sys.stdout.flush()
 
 

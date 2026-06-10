@@ -609,3 +609,87 @@ ibm_kingston, 20s QPU. [[5,1,3]] asymmetry 0.040 vs 3-qubit 0.254. 580s QPU rema
 **No finite-size peak shift for q≥5.** Peak sits exactly at g_c=1/q. For q=2,3 the peak approaches g_c from below as ~1/N. Zero shift consistent with self-duality fixing g_c exactly + sharp transition.
 
 **CAVEAT:** q=5 result based on only 2 sizes (n=6,8). Need more sizes to confirm. q=4 deviation may reflect logarithmic corrections at the marginal case.
+
+## q=4 chi_F asymptote thread, DETAILED HISTORY (Sprints 124-136; archived from KNOWLEDGE.md 2026-06-09)
+
+*Read this when you need the full methodology of the q=4 chi_F / marginal-log story. The
+audited, hedged SUMMARY lives in KNOWLEDGE.md; sprint reports have full data. An external
+48-agent audit (2026-06-09) confirmed the numbers below but HEDGED three interpretive
+claims — see the "Audit 2026-06-09" entries in CHANGELOG.md and sprints/audit_2026-06-09.md.*
+
+### Spectral chi_F: Methodology Status (Sprints 125-126)
+Spectral Lehmann sum was missing factor 2 (Sprint 125). Even corrected, spectral method captures only the dominant state — non-dominant states at high eigenvalue indices cause **systematic negative alpha bias of 0.005–0.038** (Sprint 126). Bias grows with system size. **Use exact chi_F (finite-difference) for all exponent claims.** The selection rule is standard Z_q representation theory. The formula alpha = beta_me + 2·z_m − 1 is a tautological identity. *(Sprint 129 audit: exact chi_F uses overlap-squared and /n — per-site, factor-2 — both constant prefactors that cancel in the exponent, verified harmless. Values good to ~5 sig figs. g_c=1/q is exact self-dual to 1e-15.)*
+
+### q=4 chi_F framing CORRECTED (Sprint 129 audit)
+We measure the **per-site** chi_F density, whose correct leading exponent at a QCP is **2/nu − d**
+(Albuquerque, Alet, Sire, Capponi, PRB 81 064418 (2010), Eq.21). Our own q=3 anchor proves the
+convention: nu=5/6 ⇒ 2/nu−d = 7/5 = 1.40. For 4-state Potts nu=2/3 ⇒ **2/nu−d = 2.0 is the
+expected answer, not a hypothesis to reject.** Measured ~1.77 is the FINITE-SIZE value below 2:
+q=4 has the marginal (dilution, c=1) operator ⇒ slow log-corrected approach to 2; q=3 has none.
+At L<=11 the data CANNOT distinguish "1.77 forever" from "2 with marginal logs".
+
+### q=4 reframing HARDENED (Sprint 130) — calibrated collapse + amplitude exponents
+Two calibrated, g_c-assumption-free observables from the full chi_F(g,N) curve (calibration on
+q=2→1/nu=1 and q=3→1.2): data collapse gives 1/nu(q=4)=1.45 raw → 1.49 calibrated (×0.973),
+excluding 1/nu<=1.2 and CONSISTENT with the exact den Nijs nu=2/3 (1/nu=1.5). Amplitude
+(self-locating peak-height) exponent recovers 2/nu−d to <=1.3% at q=2,3 but gives a(q=4)=1.75 =
+12.7% below 2.0 — the deficit attributed to the marginal log. Peak-SHIFT exponent is unusable for
+nu (correction-dominated; logged dead end). Fixed-g_c estimator overshoots ~+0.07 at calibration
+points (systematic, larger than quoted stat errors — audit note). *(AUDIT HEDGE 2026-06-09: the
+collapse estimate carries no error bar and an undemonstrated log-insensitivity assumption; honest
+statement is "1.45–1.49 at n<=10, consistent with exact 2/3 and excluding nu>=5/6"; the 2.0
+asymptote ultimately rests on the exact literature nu.)*
+
+### q=4 chi_F WRONG-SIGN TENSION RESOLVED (Sprint 134) — fixed-g_c off-peak artifact
+S132/S133 measured chi_F at FIXED periodic g_c=1/q, but the finite-size chi_F PEAK sits at a
+pseudo-critical g*(L)≠g_c; evaluating at fixed g_c samples a MOVING off-peak tail whose penalty
+pollutes the effective exponent. Identity (verified to 5e-15): kappa_fixed = kappa_onpeak +
+d ln r/d ln L, r(L)=chi_F(g_c)/chi_F(g*). On-peak, n=4..12, BOTH BC: OPEN kappa rises
+MONOTONICALLY 0.657→1.281 (S133 "dip" retracted — it lived in the off-peak penalty); PERIODIC
+kappa_onpeak ASCENDS 1.683→1.761 toward 2.0 while kappa_fixed descends 1.86→1.78. VALIDATION
+(exp_134b/e): q=2,3 on-peak ascends / fixed-g_c descends to the SAME exact null — bracketing
+behavior, so a descending fixed-g_c kappa is NOT evidence of a sub-null asymptote. The S132 datum
+chi_F(n=12 periodic, g_c)=93.747642 and S133 chi_F_open_exact series stand as DATA; only the
+effective-exponent interpretation changed. POTENTIALLY NOVEL (modest): the opposite fixed↓/peak↑
+drift manufacturing an apparent wrong-sign tension. unpublished/sprint_134.md.
+
+### q=4 chi_F marginal-operator log analysis, open on-peak to n=24 via DMRG (Sprint 135)
+TeNPy DMRG (OPEN BC), real-dtype S_q ops; chi=48 converges chi_F to 1e-6 at n=12 (chiconv);
+central dg=1e-3 warm-started; forward-diff peak then +dg/2 vertex correction. DMRG reproduces
+S134 exact on-peak chi_F to <=0.06% at n=8,10,12. DB: chi_F_open_peak/gstar_open q=4 n=8..24,
+q=3 n=8..24. q=4 open on-peak kappa_eff ascends monotonically 0.66→1.49 (n=4..24). q=3 control:
+no-log surface fit kappa=K+d/L → K=1.401 (=exact null, R²=1.0); fixed-null log coeff s=+0.003.
+q=4: no-log fit → K=1.70 (undershoots 2.0); fixed-null 2.0+s/lnL+d/L → s=−1.26, max|resid|=0.02.
+Naive free fits overshoot for BOTH q (q3→1.94!) ⇒ only the proven-null-fixed and no-log-control
+fits are trustworthy. *(AUDIT HEDGE 2026-06-09: "LOG detected" is CONDITIONAL on the assumed 2.0
+asymptote — a no-log K=1.70 alternative fits equally well at L<=24, and s is parametrization-
+unstable (−1.3..−1.8). The robust, model-independent datum is the q3-vs-q4 CONTRAST: q=4 shows a
+0.30 deficit vs its null that the q=3 control does not. ALSO: DMRG bond dimension was capped at
+chi=48 for all production sizes with convergence verified only at n=12 — a chi-doubling check at
+n=24 is the outstanding rigor item.)*
+
+### Thermal-gap exceptional point Im(g_EP) (Sprint 136)
+New g_c-free estimator of 1/nu from the Z_q-charge-0 thermal gap Delta_eps(g)=E1−E0 (charge
+filter P=∏X_i) on the PERIODIC chain: at the gap minimum g*(L) the two charge-0 levels form a
+2-level avoided crossing ⇒ Im(g_EP)=sqrt(Delta_min/Delta_eps″). Validated vs true complex-
+symmetric diagonalization H(g*+iy) at q=2 (~2%). Local slope → exact 1/nu at q=2 (1.0, p=0.95)
+and q=3 (1.2, p=1.17); Delta_min·L→2πv·x_eps. q=4: slope climbs 1.336→1.369 (p=1.354 < 1.5),
+Delta_min·L drifts down 3.68→3.49. q=5,6,7: effective 1/nu_eff = 1.51/1.65/1.78, still climbing.
+Sat-fit gamma+A·L^{−p}: gamma≈0 for every q (gamma pinned at the fit's lower bound; q=2 err
+±0.013 — "γ=0 ±1e-3 for EVERY q" was overstated). DB: im_gEP, thermal_gap_min, gstar_thermal,
+imEP_exponent. *(AUDIT HEDGE 2026-06-09, important: the EP estimator is NOT independent of
+chi_F — both are dominated by the same single epsilon multiplet; the 2-level identity
+chi_F^peak × Im(g_EP)² ≈ const holds to ~2%, so "two observables agree" was near-tautological.
+The product-constancy itself is the clean quantitative result (single-multiplet dominance).
+The q=4 "climbs to 1.5 from below" undershoot (8.7% at matched n) IS 2-9x larger than the
+no-marginal-op controls (q2 3.9%, q3 0.9%) — consistent with, but with 4-6 sizes not uniquely
+demonstrating, the marginal log. Falsifier: at DMRG sizes the slope must follow 1.5−c/lnL,
+passing ~1.44 by L~30, rather than saturating near 1.40.)*
+
+### Older context (S124, S128) — superseded readings
+S124 open-BC DMRG chi_F n=6-20 at FIXED g_c: "drifts up 1.505→1.523" — superseded by S134
+(fixed-g_c artifact; on-peak is the valid observable). S128c power-law extrapolation alpha_inf:
+RETRACTED as evidence against logs (ansatz has no log term; fed synthetic log data it returns
+1.60-1.89). S128d AIC comparison valid only as a description of n<=11; "Salas-Sokal p=3/2" was
+MISLABELED (that is the 2D-classical specific-heat log power; their susceptibility power is 1/8;
+no chi_F log prediction exists in that paper to reject).

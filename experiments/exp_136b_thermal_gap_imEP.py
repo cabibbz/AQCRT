@@ -15,10 +15,10 @@ Accumulates results/sprint_136b_imEP_q{Q}.json ; records DB im_gEP / thermal_gap
 import numpy as np
 import json, time, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from scipy.sparse import csr_matrix
-from scipy.linalg import eigh as dense_eigh
-from gpu_utils import eigsh, gpu_status, GPU_ENABLED
-from hamiltonian_utils import _decode_states, _build_coupling, _build_field
+from gpu_utils import gpu_status
+from ep_utils import (build_parts as _ep_build_parts, charge0_two_lowest,
+                      gap_curve as _ep_gap_curve, parab_min, free_gpu as _free_gpu,
+                      DENSE_MAX)
 from db_utils import record
 
 q = int(sys.argv[1]) if len(sys.argv) > 1 else 2
@@ -29,60 +29,15 @@ sizes = [int(x) for x in sys.argv[2:]] or list(DEFAULTS.get(q, range(4, 9)))
 K = 2 * q + 6                                   # enough lowest states to reach 2nd charge-0
 OUT = os.path.join(os.path.dirname(__file__), '..', 'results', f'sprint_136b_imEP_q{q}.json')
 
-
-def _free_gpu():
-    try:
-        import cupy as cp; cp.get_default_memory_pool().free_all_blocks()
-    except Exception:
-        pass
-
+# EP math now lives in ep_utils.py (audit 2026-06-09): one implementation shared by
+# experiments and the golden gate. These thin wrappers keep this script's call shape.
 
 def build_parts(n):
-    dim, all_idx, digits, powers = _decode_states(n, q)
-    H_coup = _build_coupling(all_idx, digits, n, dim)
-    H_field = _build_field(all_idx, digits, powers, n, q, dim, range(1, q))
-    new_idx = (((digits + 1) % q) * powers).sum(axis=1)
-    P = csr_matrix((np.ones(dim), (new_idx, all_idx)), shape=(dim, dim))
-    return H_coup, H_field, P
-
-
-DENSE_MAX = 1500                               # dense subset only for the smallest dims
-                                                # (dense eigh is O(dim^3); sparse for the rest)
-
-
-def _lowest(H, dim):
-    """K lowest (eval, evec) of real-symmetric H. Dense subset for tiny dim; sparse eigsh
-    (which='SA', large ncv+maxiter) above -- converges fine since the scan window is narrow
-    and on the disordered side (near g_c, gap~1/L), away from the ordered-side near-degeneracy
-    that stalled Lanczos with the old wide window."""
-    if dim <= DENSE_MAX:
-        evals, evecs = dense_eigh(H.toarray(), subset_by_index=[0, min(K, dim) - 1])
-        return evals, evecs
-    ncv = min(dim - 1, max(4 * K, 80))
-    evals, evecs = eigsh(H, k=K, which='SA', ncv=ncv, maxiter=5000, tol=1e-9)
-    order = np.argsort(evals)
-    return evals[order], evecs[:, order]
-
-
-def charge0_gap(Hc, Hf, P, g):
-    dim = Hc.shape[0]
-    evals, evecs = _lowest(Hc + g * Hf, dim)
-    chexp = np.einsum('ij,ij->j', evecs, (P @ evecs))     # <v|P|v>, real
-    c0 = np.where(chexp > 0.9)[0]
-    _free_gpu()
-    if len(c0) < 2:
-        raise RuntimeError(f"only {len(c0)} charge-0 states in lowest {K} at g={g:.4f}")
-    return evals[c0[0]], evals[c0[1]]
+    return _ep_build_parts(n, q)
 
 
 def gap_curve(Hc, Hf, P, gs):
-    return np.array([charge0_gap(Hc, Hf, P, g)[1] - charge0_gap(Hc, Hf, P, g)[0] for g in gs])
-
-
-def parab_min(gs, ys):
-    a, b, c = np.polyfit(gs, ys, 2)
-    g0 = -b / (2 * a)
-    return g0, a * g0**2 + b * g0 + c, 2 * a
+    return _ep_gap_curve(Hc, Hf, P, gs, K)
 
 
 if os.path.exists(OUT):
@@ -132,10 +87,21 @@ def find_min(Hc, Hf, P, n, dim):
         if (0 < i < len(coarse) - 1) or not safe:
             break
         center = coarse[i]; hw *= 1.5
-    i = max(1, min(int(np.argmin(cg)), len(coarse) - 2))
+    raw_i = int(np.argmin(cg))
+    edge_hit = raw_i in (0, len(coarse) - 1)     # audit: clamping a window-edge argmin
+    if edge_hit and not safe:                    # fits a parabola around a NON-minimum;
+        raise RuntimeError(                      # fail loudly instead of recording it
+            f"n={n}: coarse gap minimum sits at the window edge (i={raw_i}) and the "
+            f"sparse path cannot recenter -- widen/move the window before trusting this n")
+    i = max(1, min(raw_i, len(coarse) - 2))
     fine = np.linspace(coarse[i - 1], coarse[i + 1], 7)
     fg = gap_curve(Hc, Hf, P, fine)
-    j = max(1, min(int(np.argmin(fg)), len(fine) - 2))
+    raw_j = int(np.argmin(fg))
+    if raw_j in (0, len(fine) - 1):
+        raise RuntimeError(
+            f"n={n}: fine-grid gap minimum sits at the grid edge (j={raw_j}) -- "
+            f"parabola vertex would extrapolate; adjust the window")
+    j = raw_j
     g_star, gmin, gpp = parab_min(fine[j - 1:j + 2], fg[j - 1:j + 2])
     return g_star, gmin, gpp, coarse, cg, fine, fg
 

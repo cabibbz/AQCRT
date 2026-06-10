@@ -1,0 +1,7 @@
+# bash entrypoint + python must stay LF even if a Windows clone smudges CRLF
+# (Git-for-Windows bash tolerates CRLF, WSL/Linux bash does not — cheap insurance)
+*.sh text eol=lf
+*.py text eol=lf
+*.md text
+*.json text
+results.db -text

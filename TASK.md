@@ -13,18 +13,22 @@ You don't remember between sessions. Your memory lives in files:
 - **results/** — raw experiment data (JSON). One file per experiment. From experiment scripts, save to `../results/` (parent directory).
 - **results.db** — SQLite database of key measurements. Query with `from db_utils import record, query`. After each experiment, record key quantities (c, x₁, g_c, ν, gaps, etc.) to the DB. To look up prior results: `query(quantity='c', q=5)` or `query(model='clock')`. This is faster and less error-prone than grepping KNOWLEDGE.md for numbers.
 - **sprints/** — individual sprint reports (one markdown file per sprint). The permanent archive.
-- **experiments/exp_NNN*.py** — standalone experiment scripts in the `experiments/` folder. One per experiment, never batched. Save new scripts there.
-- **gpu_utils.py** — Drop-in GPU eigensolver. **USE THIS** in every experiment script:
+- **experiments/exp_NNN*.py** — standalone experiment scripts in the `experiments/` folder. One per experiment, never batched. Save new scripts there. (All shared utils below also live in `experiments/`; scripts resolve paths from `__file__`, so they run from any cwd.)
+- **experiments/gpu_utils.py** — Drop-in GPU eigensolver. **USE THIS** in every experiment script:
   `from gpu_utils import eigsh` instead of `from scipy.sparse.linalg import eigsh`.
   Same API, automatic GPU when dim > 50k, 14x speedup at q=5 n=8. Enables q=5 n=10 (10M dim, 19s).
-- **hamiltonian_utils.py** — Shared Hamiltonian builders. **USE THIS** instead of re-implementing:
+  (With `return_eigenvectors=False` it returns eigenvalues ASCENDING on both backends.)
+- **experiments/hamiltonian_utils.py** — Shared Hamiltonian builders. **USE THIS** instead of re-implementing:
   `from hamiltonian_utils import build_hybrid_parts, build_sq_potts_parts`
   `H_coup, H_field = build_hybrid_parts(n, q)` then `H = H_coup + g * H_field`.
   Also: `build_hybrid_H(n, q, g)` and `build_sq_potts_H(n, q)` for one-shot full H.
-- **fss_utils.py** — Finite-size scaling with error bars. **USE THIS** for exponent fitting:
+- **experiments/fss_utils.py** — Finite-size scaling with error bars. **USE THIS** for exponent fitting:
   `from fss_utils import fit_power_law, pairwise_exponents, fit_spectral_exponents`
   `result = fit_power_law(sizes, chi_values)` → `result['alpha']`, `result['alpha_err']`, `result['r_squared']`.
   `fit_spectral_exponents(sizes, chi_F, gaps, me_sq)` → alpha, z_m, beta_me with errors + reconstruction check.
+- **experiments/ep_utils.py** — Thermal-gap exceptional-point estimator of 1/ν (the S136 pipeline):
+  `from ep_utils import build_parts, charge0_two_lowest, gap_curve, parab_min, im_gEP_estimate`.
+  One implementation, shared by experiments and the golden gate — extend it there, don't fork it.
 
 Failed approaches are critical to log. Without them you'll waste sprints repeating dead ends.
 
@@ -37,7 +41,7 @@ Failed approaches are critical to log. Without them you'll waste sprints repeati
 ### Research rules
 - **Diminishing returns:** If your experiment would confirm a prior result under slightly different conditions, skip it — log the prediction and move on. Only revisit if you expect the prediction is *wrong*.
 - **Literature check:** Before each sprint, search arXiv and Google Scholar for your topic. Use at LEAST 3 different keyword variations — the same physics appears under different names. For our model: try "quantum Potts clock", "Z_q clock model BKT", "complex CFT Potts q>4", and the specific quantity you're measuring. If results exist, find what's *unresolved* or *contradicted*. Test the gap, not the conclusion.
-- **Hardware validation rule:** When a simulator result is mature enough to have specific numerical predictions at n≤10, plan a hardware test. You have QPU time that expires monthly — unspent time is wasted. Every ~10 sprints, ask yourself: what's my strongest simulator prediction that hardware could confirm or break?
+- **Hardware validation rule:** When a simulator result is mature enough to have specific numerical predictions at n≤10, plan a hardware test. You have QPU time that expires monthly — unspent time is wasted. Every ~10 sprints, ask yourself: what's my strongest simulator prediction that hardware could confirm or break? **(Currently moot: IBM credentials are BLOCKED — see Environment. Log the prediction; don't attempt submission.)**
 - **Novelty detection:** When you find a quantitative result (a formula, a scaling exponent, a phase boundary, a critical value), search specifically for that result in the literature. If you can't find it, flag it explicitly in the sprint report: "**POTENTIALLY NOVEL:** [result]. Literature search found no prior measurement of [specific thing]." Then copy the sprint report to `unpublished/` so novel findings don't get buried in the archive.
 - **Novelty hardening:** When you flag something as POTENTIALLY NOVEL, don't move on immediately. Spend 1-2 sprints stress-testing the claim before exploring new directions:
   1. **More data points** — extend to larger system sizes (use GPU). A claim resting on 3 data points is fragile. Get 5+.
@@ -54,29 +58,26 @@ Failed approaches are critical to log. Without them you'll waste sprints repeati
 
 ## Environment
 
-- Python 3.12, venv at ~/quantum-env (activate with: source ~/quantum-env/bin/activate)
+- **Windows 10**; python = system **Python 3.11** (`C:\Users\me\AppData\Local\Programs\Python\Python311`),
+  invoked as plain `python` — **no venv activation needed**. Ignore the stray `~/` directory at the
+  repo root (a leftover venv tree, not project code). The loop itself runs under Git Bash.
 - `qiskit` 2.x, `qiskit-ibm-runtime`, `qiskit-aer`
 - `pennylane`, `pennylane-qiskit` for differentiable quantum computing
-- `physics-tenpy` (TeNPy) for DMRG ground states of 1D systems — use this for n>10.
+- `physics-tenpy` (TeNPy 1.1) for DMRG ground states of 1D systems — use this for n>10.
   TeNPy computes ground states and reduced density matrices at n=50+ in seconds.
   Use exact diag for n≤10 (faster), DMRG for n>10. Both give the same ρ_A.
   Key patterns: MPS ground state → reduced density matrix → your existing measures (MI, I3, entropy, H_E).
   DMRG is 1D only — doesn't help with 2D systems.
-- **GPU: NVIDIA TITAN RTX (24GB) with CuPy 14.** Use GPU for exact diag when Hilbert space dim > 50,000 (q=5 n≥7, q=7 n≥6, q=10 n≥5). This gives 10-50x speedup on sparse eigensolves. Pattern:
-  ```python
-  import cupy as cp
-  from cupyx.scipy.sparse import csr_matrix as cp_csr
-  from cupyx.scipy.sparse.linalg import eigsh as cp_eigsh
-  # Convert scipy sparse → cupy sparse, eigsh on GPU, results back to numpy
-  H_gpu = cp_csr(H_cpu)
-  evals_gpu, evecs_gpu = cp_eigsh(H_gpu, k=4, which='SA')
-  evals = cp.asnumpy(evals_gpu)
-  ```
-  Fall back to scipy `eigsh` if CuPy fails (some edge cases with very sparse matrices).
-  **This extends exact diag reach:** q=5 n=10 (dim=9.8M) and q=7 n=7 (dim=823k) are now feasible within 300s.
-- IBM Quantum Open Plan: **10 min/month** of real QPU time
+- **GPU: NVIDIA TITAN RTX (24GB). CuPy is PINNED at cupy-cuda12x 13.6.0 with numpy 1.26.4 —
+  do NOT upgrade to CuPy 14.x** (needs numpy≥2, ABI-breaks the validated stack; caused the
+  S129–131 silent GPU outage, fixed S132). Don't hand-roll the cupy pattern: use
+  `from gpu_utils import eigsh` (auto-GPU above dim 50k, loud CPU fallback).
+  **Exact-diag reach:** q=5 n=10 (dim=9.8M) and q=7 n=7 (dim=823k) feasible within 300s.
+- IBM Quantum Open Plan: **10 min (600s) per month** of real QPU time
 - Local simulator: ~10 qubits practical limit for density matrix ops on CPU
-- IBM API token is saved in `~/.qiskit/qiskit-ibm.json`
+- **IBM credentials BLOCKED:** `~/.qiskit/qiskit-ibm.json` exists but is EMPTY (no token) —
+  QPU runs will fail at connect. A human must re-save the token; until then do NOT plan
+  hardware sprints (log the prediction you WOULD test instead).
 
 ## Hard Resource Limits
 
@@ -84,7 +85,8 @@ Failed approaches are critical to log. Without them you'll waste sprints repeati
 2. **Max 300 seconds** per bash command — design experiments to fit
 3. **Separate script per experiment** — never batch experiments in one script
 4. **Save results immediately** after each experiment — write JSON AND call `record()` from `db_utils.py` for key quantities before doing anything else
-5. **Git commit after every experiment** — include `experiments/`, `results/`, and `sprints/`
+5. **Git commit AND PUSH after every experiment** — include `experiments/`, `results/`, and `sprints/`. Verify the push succeeded (`git rev-list --count origin/main..main` should be 0); the repo is the scientific record and the local disk must never be its only copy.
+5b. **BLOCKING integrity gates**: loop.sh runs `python experiments/test_golden.py` + `python experiments/db_check.py` before AND after every sprint and HALTS the loop on failure. If you change chi_F conventions, canonical anchors, model names, or results.db schema, update the golden values/gate in the SAME sprint and re-run both gates before your final commit.
 6. **Write sprint report incrementally** — start it early, append as you go
 7. **Test timing on a single case** before scaling up
 8. **Sanity check results** — when an analytic answer is known, verify against it

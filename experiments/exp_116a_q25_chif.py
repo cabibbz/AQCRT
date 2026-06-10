@@ -19,7 +19,9 @@ results = {
 }
 
 def save():
-    outpath = os.path.join(os.path.dirname(__file__), 'results', 'sprint_116a_q25_chif.json')
+    # audit 2026-06-09: was dirname(__file__)/'results' (a stray experiments/results/),
+    # stranding the Apr-7 re-run outside the canonical results/ tree; fixed to ../results
+    outpath = os.path.join(os.path.dirname(__file__), '..', 'results', 'sprint_116a_q25_chif.json')
     os.makedirs(os.path.dirname(outpath), exist_ok=True)
     with open(outpath, 'w') as f:
         json.dump(results, f, indent=2, default=str)

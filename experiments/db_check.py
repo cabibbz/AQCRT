@@ -103,14 +103,46 @@ def main():
             print(f"  DRIFT {fn}:{ln}  q={q} doc={val} not in DB {dbvals}")
             print(f"        > {text[:90]}")
 
-    # CHECK B: model-name fragmentation
+    # CHECK B: model-name fragmentation -- now a HARD FAIL (audit 2026-06-09: the DB was
+    # migrated to one spelling per family and db_utils.record() canonicalizes on write,
+    # so any reappearance of a second spelling is a regression, not history).
     c = sqlite3.connect(f'file:{DB}?mode=ro', uri=True)
     models = [r[0] for r in c.execute("SELECT DISTINCT model FROM measurements").fetchall()]
     maxs = c.execute("SELECT MAX(sprint) FROM measurements").fetchone()[0]
-    c.close()
     sq_variants = [m for m in models if m and m.lower().replace('_', '').startswith('sqpotts') or m in SQ_MODELS]
-    print("\n[B] S_q model-name spellings in DB (query by ONE name misses the others):")
-    print(f"  {sq_variants}")
+    frag = []
+    if len(sq_variants) > 1:
+        frag.append(f"S_q family has {len(sq_variants)} spellings: {sq_variants}")
+    hyb2 = [m for m in models if m and m.lower() == 'hybrid_2d']
+    if len(hyb2) > 1:
+        frag.append(f"hybrid_2d family has {len(hyb2)} spellings: {hyb2}")
+    print("\n[B] model-name fragmentation (one canonical spelling per family):")
+    if frag:
+        for f in frag:
+            print(f"  FRAGMENTED: {f}")
+    else:
+        print(f"  ok -- canonical: {sq_variants}")
+
+    # CHECK D: method-conflict detector (audit 2026-06-09). A (quantity,model,q,n) group
+    # whose values disagree by >1% across methods is a collision like the old c_eff one.
+    # Legacy groups (all rows sprint<=136) are HISTORY: count only. New rows (sprint>=137)
+    # that create/extend a conflict FAIL the gate.
+    conf = c.execute("""
+        SELECT quantity, model, q, n, MIN(value), MAX(value), MAX(sprint),
+               COUNT(DISTINCT method)
+        FROM measurements
+        WHERE value IS NOT NULL AND quantity NOT LIKE 'g_c%'
+        GROUP BY quantity, model, q, n
+        HAVING COUNT(DISTINCT method) > 1
+           AND ABS(MAX(value) - MIN(value)) > 0.01 * MAX(ABS(MAX(value)), ABS(MIN(value)))
+    """).fetchall()
+    c.close()
+    new_conf = [r for r in conf if (r[6] or 0) >= 137]
+    print(f"\n[D] cross-method value conflicts >1% (same quantity/model/q/n): "
+          f"{len(conf)} legacy group(s) [informational]")
+    for r in new_conf:
+        print(f"  NEW CONFLICT (sprint {r[6]}): {r[0]} {r[1]} q={r[2]} n={r[3]} "
+              f"values {r[4]:.6g}..{r[5]:.6g} across {r[7]} methods")
 
     # CHECK C: provenance / freshness
     sprint_reports = [f for f in os.listdir(os.path.join(ROOT, 'sprints')) if re.match(r'sprint_\d+', f)]
@@ -121,10 +153,16 @@ def main():
               "DB may lag the latest doc framing (check retractions by hand).")
 
     print("\n" + "=" * 70)
-    n_real = len([d for d in drift])
-    print(f"DB-CHECK: {'DRIFT FOUND (%d)' % n_real if n_real else 'consistent'}")
+    problems = []
+    if drift:
+        problems.append(f"doc drift ({len(drift)})")
+    if frag:
+        problems.append(f"model fragmentation ({len(frag)})")
+    if new_conf:
+        problems.append(f"new method conflicts ({len(new_conf)})")
+    print(f"DB-CHECK: {'FAIL: ' + ', '.join(problems) if problems else 'consistent'}")
     print("=" * 70)
-    return 1 if n_real else 0
+    return 1 if problems else 0
 
 
 if __name__ == "__main__":
