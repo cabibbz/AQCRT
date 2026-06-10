@@ -46,6 +46,18 @@ else:
 
 
 def save():
+    # merge-on-save: another invocation may have added sizes since we loaded the JSON
+    # (a concurrent re-measure chain clobbered q=10 n=28 this way -- read-modify-write
+    # race on the accumulate pattern). Disk wins for sizes THIS process didn't measure.
+    if os.path.exists(OUT):
+        try:
+            with open(OUT) as f:
+                disk = json.load(f)
+            for k, v in disk.get('sizes', {}).items():
+                if int(k) not in results['sizes']:
+                    results['sizes'][int(k)] = v
+        except Exception:
+            pass
     results['timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S')
     with open(OUT, 'w') as f:
         json.dump(results, f, indent=2)
@@ -105,6 +117,8 @@ def measure(n):
     def fit():
         gg_all = np.array(sorted(pts)); dd_all = np.array([pts[g] for g in gg_all])
         keep = dd_all <= 3.0 * dd_all.min()    # far wings feel other levels -> exclude
+        if keep.sum() < 7 and len(gg_all) >= 7:
+            keep = dd_all <= 4.0 * dd_all.min()   # widen rather than fit 4 params to ~4 pts
         gg, dd = gg_all[keep], dd_all[keep]
         if len(gg) < 4:
             gg, dd = gg_all, dd_all
@@ -118,12 +132,20 @@ def measure(n):
         return popt, float(np.sqrt(np.mean(resid**2)) / dd.min()), pcov, int(len(gg))
 
     popt, relres, pcov, nfit = fit()
-    # round 2: ensure the dip BOTTOM is sampled (<=1.5x Delta_m), else add shoulder+center
-    for refine in range(2):
+    # refinement until: dip bottom sampled (<=1.5x Delta_m), tight fit (relres < 5e-3),
+    # AND >=7 kept points -- a 4-param fit through ~5 points is exact-identified, passes
+    # any relres gate, yet leaves 5-20% parameter noise (caught on q=10 n=8/10: Dm moved
+    # 18% on re-measurement). nfit >= 7 makes the residual a real diagnostic.
+    for refine in range(4):
         dm, c1, c2, gs = popt
-        if min(pts.values()) <= 1.5 * dm and relres < 0.03:
+        if min(pts.values()) <= 1.5 * dm and relres < 5e-3 and nfit >= 7:
             break
-        for g in [gs - dm / c1, gs, gs + dm / c1]:
+        if min(pts.values()) > 1.5 * dm:
+            extra = [gs - dm / c1, gs, gs + dm / c1]
+        else:
+            extra = [gs - 1.5 * dm / c1, gs - 0.5 * dm / c1, gs + 0.5 * dm / c1,
+                     gs + 1.5 * dm / c1][:max(3, 7 - nfit)]
+        for g in extra:
             gap_at(float(np.clip(g, gs - w, gs + w)))
         popt, relres, pcov, nfit = fit()
     dm, c1, c2, gs = popt

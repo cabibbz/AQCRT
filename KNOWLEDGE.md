@@ -7,18 +7,17 @@ claims — hedges are inline below; full audit report: sprints/audit_2026-06-09.
 ## Open Items — Check each sprint, remove when done
 - **Hardware validation** — 580s QPU unused for ~90 sprints (BLOCKED: ~/.qiskit/qiskit-ibm.json
   empty; needs human to restore token). Strongest prediction: q=2 Ising χ_F at g_c on 5-10 qubits.
-- **Walking crossover via Z_q-conserving DMRG — RETARGETED to q=8-10 (audit).** The L≳ξ
-  power-law→faster crossover of Im(g_EP) is the definitive walking test, but EXACT classical
-  ξ_d values (Buffenoir-Wallon 1993) are: **ξ(q5)=2512, ξ(q6)=159, ξ(q7)=48, ξ(q8)=24, ξ(q10)=10.6**
-  — the old "ξ>12" budget anchor was only a lower bound from n≤12 data. DMRG n=20-40 brackets
-  L~ξ ONLY for q≥8. Keep q=5,6 as deep-shadow controls.
-- **Jacobsen-Wiese comparison (PRL 133 077101) — run BEFORE more complex-CFT language.**
-  PRELIMINARY (audit-verifier Coulomb-gas continuation, redo properly): Re(1/ν_complex) =
-  1.534/1.563/1.588 for q=5/6/7 vs our effective 1.51/1.65/1.78 — q=5 matches, q=6,7 rise PAST
-  it toward the first-order value d=2. If that holds, q≥6 values are crossover phenomenology,
-  not shadow exponents.
-- **S135 rigor gap:** chi-doubling DMRG check at n=24 (q=4 and q=3 control, chi 48→96, svd 1e-9);
-  production used chi=48 verified only at n=12.
+- **~~Walking crossover via Z_q-conserving DMRG~~ DONE (Sprint 137) — CROSSOVER OBSERVED.**
+  Exponential decay term required at q=8 (dAIC +17, Λ_Im=1.59ξ) and q=10 (dAIC +37, Λ_Im=1.71ξ);
+  q=6 control needs none. **Λ ∝ ξ_d (exact: 158.9/23.9/10.56 for q=6/8/10)**. See S137 block below.
+- **~~Jacobsen-Wiese comparison~~ DONE (Sprint 137):** Re(1/ν_complex) = 1.534/1.563/1.588/
+  1.609/1.646 (q=5/6/7/8/10; den Nijs continuation, validated exact on Q≤4). Measured effective
+  1/ν matches ONLY at q=5 (1.505, −1.9%); q=6,7 rise PAST it (+5.4%/+11.8%) toward d=2 —
+  **"conformal shadow" language is quantitatively licensed only for q=5.**
+- **~~S135 rigor gap~~ CLOSED (Sprint 137d):** chi-doubling 48→96 at n=24: q=3 rel 3.1e-8,
+  q=4 rel 5.0e-5 — the S135 production values were fully converged.
+- **Λ/ξ coefficient + interface tension** (new, from S137): test σ=1/Λ_Dm against the known 2D
+  Potts interface tension; q=7 (ξ=48.1) is a parameter-free prediction Λ_Im≈77 for n≤40 onset.
 
 ## Five Entanglement Archetypes
 | Archetype | Example | MI pattern | I3 sign | Negativity | Source |
@@ -62,11 +61,22 @@ canonical: `sq_potts`, `hybrid`, `hybrid_2d` (migrated 2026-06-09; db_utils cano
   undershoot (8.7% at matched n) is 2-9x the no-marginal-op controls (q2 3.9%, q3 0.9%) —
   consistent with, not uniquely demonstrating, the marginal log. Falsifier at DMRG sizes: slope
   must follow 1.5−c/lnL (pass ~1.44 by L~30), not saturate near 1.40.
-- **Walking q=5,6,7 (hedged):** effective 1/ν_eff = 1.51/1.65/1.78, rising smoothly across q=4,
-  still climbing at n≤9 — **consistent with the complex-CFT "conformal shadow" interpretation**
-  (GRZ), but equally consistent with generic weak-first-order finite-size drift; the method
-  undershoots 4-9% at these sizes and q=7 has only 3 slope pairs. The Jacobsen-Wiese comparison
-  (Open Item) is the discriminating test. (Hedged from "= complex-CFT shadow".)
+- **Walking q=5,6,7 (S137-resolved):** S136's effective 1/ν_eff = 1.51/1.65/1.78. The S137
+  Coulomb-gas comparison shows q=5 matches Re(1/ν_complex)=1.534 (genuine shadow; ξ≈2500) while
+  q=6,7 already exceed theirs (1.563/1.588) — crossover-contaminated even at L/ξ ~ 0.05-0.15.
+- **S137 — WALKING CROSSOVER OBSERVED (strongest result to date; unpublished/sprint_137.md):**
+  Z_q-charge-conserving DMRG (zq_dmrg_utils, ED-validated 3e-4) extends the thermal-gap EP to
+  n=28 at q=8,10. Both Im(g_EP)(L)=Δm/c1 (asymmetric avoided-crossing fit) and Δ_min(L) demand
+  an exponential factor beyond the shadow power law exactly where L crosses the EXACT ξ_d:
+  fits A·L^{−p}e^{−L/Λ} preferred by dAIC +17/+37 (q=8/q=10, Δm series) with **Λ_Im = 1.59ξ /
+  1.71ξ and Λ_Dm = 2.51ξ / 2.71ξ — Λ ∝ ξ to ~10% while ξ varies 2.26x**; the q=6 control
+  (ξ=159, L/ξ≤0.15) needs NO decay (dAIC≈0; Δm·L flat ~2.4 = CFT-like). Excludes truncation
+  artifacts (same chi ladder for control; slopes smooth across chi tiers). The exponential gap
+  closing at first-order quantum Potts transitions is known (Campostrini et al. 1410.8662);
+  new: the EP observable, the q-resolved shadow→crossover map vs exact ξ_d, the null control,
+  and the q=5-only shadow anchor. METHOD NOTES: open-chain crossing wings are asymmetric (fit
+  Δ=sqrt(Δm²+(c1δ+c2δ²)²)); 4-param fits need ≥7 points (5-point "exact" fits hide 5-18%
+  parameter noise); DB names BC-qualified (im_gEP_open).
 
 ## χ_F effective exponents (S127-131; finite-size EFFECTIVE values, fixed-g_c periodic)
 | q | S_q α_eff | sizes | note |

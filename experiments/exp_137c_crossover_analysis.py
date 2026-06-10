@@ -63,6 +63,43 @@ def aic(n_pts, ss_res, k):
     return n_pts * np.log(ss_res / n_pts) + 2 * k
 
 
+def _fit_series(ns, y, q, relres=None):
+    """Pure-power vs shadow+decay comparison for one series y(L) (log-space fits).
+    Points are weighted by their per-size hyperbola fit quality: sigma_i =
+    max(fit_rel_resid_i, 2e-3) -- small-n sizes have a ~1e-2 model-error floor
+    (wide dips), large-n fits are clean; unweighted fits would let the noisy small-n
+    points distort the crossover term."""
+    ln_y = np.log(y)
+    rr, nf = relres if relres is not None else ([None] * len(ns), [None] * len(ns))
+    sig = np.array([max(r if r else 2e-3, 2e-3) for r in rr])
+    # a 4-param hyperbola through <7 points is exact-identified: its residual is fake
+    # precision (caught at q=10 n=8/10: 6-18% parameter moves on re-measurement).
+    # Floor such points at the empirical model-error scale instead.
+    sig = np.array([max(s, 8e-3) if (f is not None and f < 7) else s
+                    for s, f in zip(sig, nf)])
+    pp, _ = curve_fit(lambda L, A, p: np.log(pure_power(L, A, p)), ns, ln_y,
+                      p0=[y[0] * ns[0], 1.5], sigma=sig, absolute_sigma=False, maxfev=20000)
+    ss_pp = float(np.sum(((ln_y - np.log(pure_power(ns, *pp))) / sig)**2))
+    sd, sd_cov = curve_fit(lambda L, A, p, iv: np.log(shadow_decay(L, A, p, iv)), ns, ln_y,
+                           p0=[y[0] * ns[0], 1.2, 1e-3], sigma=sig, absolute_sigma=False,
+                           bounds=([1e-12, 0.0, 0.0], [1e6, 4.0, 1.0]), maxfev=40000)
+    ss_sd = float(np.sum(((ln_y - np.log(shadow_decay(ns, *sd))) / sig)**2))
+    Lam = (1.0 / sd[2]) if sd[2] > 1e-12 else float('inf')
+    with np.errstate(invalid='ignore'):
+        dia = np.sqrt(np.diag(sd_cov))
+    Lam_err = float(dia[2] / sd[2]**2) if (sd[2] > 1e-12 and np.isfinite(dia[2])) else None
+    a_pp, a_sd = aic(len(ns), ss_pp, 2), aic(len(ns), ss_sd, 3)
+    slopes = [[int(ns[i]), int(ns[i + 1]),
+               float((ln_y[i + 1] - ln_y[i]) / (np.log(ns[i + 1]) - np.log(ns[i])))]
+              for i in range(len(ns) - 1)]
+    return {'local_slopes': slopes,
+            'pure_power': {'p': float(pp[1]), 'ss': ss_pp, 'aic': a_pp},
+            'shadow_decay': {'p': float(sd[1]), 'Lambda': Lam, 'Lambda_err': Lam_err,
+                             'Lambda_over_xi': (Lam / XI[q]) if (XI.get(q) and np.isfinite(Lam)) else None,
+                             'ss': ss_sd, 'aic': a_sd},
+            'dAIC_power_minus_decay': a_pp - a_sd}
+
+
 def analyze_q(q):
     path = os.path.join(RES, f'sprint_137b_crossover_q{q}.json')
     if not os.path.exists(path):
@@ -73,30 +110,15 @@ def analyze_q(q):
     if len(ns) < 4:
         return None
     im = np.array([s[int(n)]['im_gEP'] for n in ns])
-    ln_im = np.log(im)
-
-    # pure power
-    pp, _ = curve_fit(lambda L, A, p: np.log(pure_power(L, A, p)), ns, ln_im,
-                      p0=[im[0] * ns[0], 1.5], maxfev=20000)
-    ss_pp = float(np.sum((ln_im - np.log(pure_power(ns, *pp)))**2))
-    # shadow + decay (fit in log space; invLam >= 0)
-    sd, sd_cov = curve_fit(lambda L, A, p, iv: np.log(shadow_decay(L, A, p, iv)), ns, ln_im,
-                           p0=[im[0] * ns[0], 1.2, 1e-3],
-                           bounds=([1e-12, 0.0, 0.0], [1e6, 4.0, 1.0]), maxfev=40000)
-    ss_sd = float(np.sum((ln_im - np.log(shadow_decay(ns, *sd)))**2))
-    Lam = (1.0 / sd[2]) if sd[2] > 1e-12 else float('inf')
-    Lam_err = float(np.sqrt(np.diag(sd_cov))[2] / sd[2]**2) if sd[2] > 1e-12 else None
-    a_pp, a_sd = aic(len(ns), ss_pp, 2), aic(len(ns), ss_sd, 3)
-    slopes = [[int(ns[i]), int(ns[i + 1]),
-               float((ln_im[i + 1] - ln_im[i]) / (np.log(ns[i + 1]) - np.log(ns[i])))]
-              for i in range(len(ns) - 1)]
+    dm = np.array([s[int(n)]['gap_min'] for n in ns])
+    # Two series: Im = Dm/c1 (the EP observable; c1 division adds smooth power only but
+    # carries fit-degeneracy noise at sizes with few kept points) and Dm itself (robustly
+    # pinned by the sampled minimum; the exponential crossover lives in Dm).
+    rr = [s[int(n)].get('fit_rel_resid') for n in ns]
+    nf = [s[int(n)].get('n_fit_points') for n in ns]
     return {'q': q, 'xi': XI.get(q), 'n': ns.tolist(), 'im_gEP': im.tolist(),
-            'local_slopes': slopes,
-            'pure_power': {'p': float(pp[1]), 'ss': ss_pp, 'aic': a_pp},
-            'shadow_decay': {'p': float(sd[1]), 'Lambda': Lam, 'Lambda_err': Lam_err,
-                             'Lambda_over_xi': (Lam / XI[q]) if (XI.get(q) and np.isfinite(Lam)) else None,
-                             'ss': ss_sd, 'aic': a_sd},
-            'dAIC_power_minus_decay': a_pp - a_sd}
+            'gap_min': dm.tolist(), 'fit_relres': rr, 'n_fit_points': nf,
+            'im': _fit_series(ns, im, q, (rr, nf)), 'dm': _fit_series(ns, dm, q, (rr, nf))}
 
 
 out = {'experiment': '137_analysis', 'sprint': 137, 'coulomb_gas': {}, 'crossover': {}}
@@ -115,23 +137,27 @@ for Q in [5, 6, 7, 8, 9, 10]:
            error=None, method='coulomb_gas_continuation',
            notes=f'den Nijs CG, |Im|={imv:.4f}; n=0 sentinel = size-independent theory value')
 
-print("\n[1] crossover fits  Im(g_EP) = A L^-p exp(-L/Lambda)   (137b open-BC Z_q DMRG):")
+print("\n[1] crossover fits  y(L) = A L^-p exp(-L/Lambda)   (137b open-BC Z_q DMRG):")
 for q in [6, 8, 10]:
     r = analyze_q(q)
     if r is None:
         print(f"  q={q}: insufficient data")
         continue
     out['crossover'][q] = r
-    sd = r['shadow_decay']
-    lam_s = f"{sd['Lambda']:.1f}" if np.isfinite(sd['Lambda']) else "inf"
-    lox = f" = {sd['Lambda_over_xi']:.2f} xi" if sd['Lambda_over_xi'] else ""
-    print(f"  q={q} (xi={r['xi']}):  slopes {[round(s[2], 3) for s in r['local_slopes']]}")
-    print(f"        pure power p={r['pure_power']['p']:.3f}  vs  shadow+decay p={sd['p']:.3f}, "
-          f"Lambda={lam_s}{lox}   dAIC(power-decay)={r['dAIC_power_minus_decay']:+.1f}")
+    print(f"  q={q} (xi={r['xi']}):")
+    for key, label in [('dm', 'Dm   '), ('im', 'Im_EP')]:
+        f = r[key]; sd = f['shadow_decay']
+        lam_s = f"{sd['Lambda']:.1f}" if np.isfinite(sd['Lambda']) else "inf"
+        lox = f" = {sd['Lambda_over_xi']:.2f} xi" if sd['Lambda_over_xi'] else ""
+        print(f"    {label}: slopes {[round(s[2], 2) for s in f['local_slopes']]}")
+        print(f"           power p={f['pure_power']['p']:.3f}  vs  decay p={sd['p']:.3f} "
+              f"Lambda={lam_s}{lox}   dAIC(power-decay)={f['dAIC_power_minus_decay']:+.1f}")
+    sd = r['dm']['shadow_decay']
     if np.isfinite(sd['Lambda']):
         record(sprint=137, model='sq_potts', q=q, n=int(max(r['n'])), quantity='crossover_Lambda',
-               value=sd['Lambda'], error=sd['Lambda_err'], method='shadow_decay_fit_dmrg_open',
-               notes=f"p={sd['p']:.3f}; xi_exact={r['xi']}; dAIC vs pure power={r['dAIC_power_minus_decay']:+.1f}")
+               value=sd['Lambda'], error=sd['Lambda_err'], method='shadow_decay_fit_Dm_dmrg_open',
+               notes=f"from gap_min series; p={sd['p']:.3f}; xi_exact={r['xi']}; "
+                     f"dAIC vs pure power={r['dm']['dAIC_power_minus_decay']:+.1f}")
 
 out['timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S')
 with open(OUT, 'w') as f:
