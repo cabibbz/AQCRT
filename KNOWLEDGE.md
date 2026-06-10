@@ -16,8 +16,13 @@ claims — hedges are inline below; full audit report: sprints/audit_2026-06-09.
   **"conformal shadow" language is quantitatively licensed only for q=5.**
 - **~~S135 rigor gap~~ CLOSED (Sprint 137d):** chi-doubling 48→96 at n=24: q=3 rel 3.1e-8,
   q=4 rel 5.0e-5 — the S135 production values were fully converged.
-- **Λ/ξ coefficient + interface tension** (new, from S137): test σ=1/Λ_Dm against the known 2D
-  Potts interface tension; q=7 (ξ=48.1) is a parameter-free prediction Λ_Im≈77 for n≤40 onset.
+- **~~q=7 Λ prediction test~~ DONE (Sprint 138) — CONFIRMED, dead center.** Registered
+  Λ_Im=79±5 / Λ_Dm=126±7; measured 79±25 / 118±24, decay independently demanded (dAIC +13/+7),
+  fixed-at-prediction fit beats pure power with zero free Λ (+14.9/+9.0). Λ_Im≈1.65ξ_d spans
+  q=7,8,10 (ξ 4.6x range) with the q=7 point earned blind.
+- **Interface-tension identity (new, from S138):** σ_eff·ξ_d = ξ/Λ_Dm = 0.41, 0.40, 0.37 at
+  q=7/8/10 — suspiciously constant; check vs exact 2D Potts interface-tension/ξ duality
+  (analysis-only sprint).
 
 ## Five Entanglement Archetypes
 | Archetype | Example | MI pattern | I3 sign | Negativity | Source |
@@ -64,6 +69,10 @@ canonical: `sq_potts`, `hybrid`, `hybrid_2d` (migrated 2026-06-09; db_utils cano
 - **Walking q=5,6,7 (S137-resolved):** S136's effective 1/ν_eff = 1.51/1.65/1.78. The S137
   Coulomb-gas comparison shows q=5 matches Re(1/ν_complex)=1.534 (genuine shadow; ξ≈2500) while
   q=6,7 already exceed theirs (1.563/1.588) — crossover-contaminated even at L/ξ ~ 0.05-0.15.
+- **S138 — Λ ∝ ξ CONFIRMED by blind prediction (q=7):** the S137 coefficients predicted
+  Λ_Im=79±5 BEFORE any q=7 data; measurement returned 79±25 (1.64ξ vs predicted 1.65ξ) with
+  the decay term independently demanded at the q=8-calibrated strength. Λ_Dm/Λ_Im = 1.50
+  (vs 1.58/1.59). Upgrades S137 to CONFIRMED NOVEL (hardening #1-#3). unpublished/sprint_138.md.
 - **S137 — WALKING CROSSOVER OBSERVED (strongest result to date; unpublished/sprint_137.md):**
   Z_q-charge-conserving DMRG (zq_dmrg_utils, ED-validated 3e-4) extends the thermal-gap EP to
   n=28 at q=8,10. Both Im(g_EP)(L)=Δm/c1 (asymmetric avoided-crossing fit) and Δ_min(L) demand

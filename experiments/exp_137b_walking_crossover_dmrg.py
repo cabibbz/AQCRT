@@ -29,7 +29,11 @@ q = int(sys.argv[1])
 sizes = [int(x) for x in sys.argv[2:]]
 g_c = 1.0 / q
 XI = {5: 2512.2, 6: 158.9, 7: 48.1, 8: 23.9, 9: 16.0, 10: 10.56}.get(q)
-OUT = os.path.join(os.path.dirname(__file__), '..', 'results', f'sprint_137b_crossover_q{q}.json')
+# generic harness since S137; later sprints set SPRINT_NO so provenance (DB rows + filename)
+# is honest -- e.g. the S138 q=7 prediction test writes sprint_138b_crossover_q7.json
+SPRINT = int(os.environ.get('SPRINT_NO', 137))
+OUT = os.path.join(os.path.dirname(__file__), '..', 'results',
+                   f'sprint_{SPRINT}b_crossover_q{q}.json')
 
 
 def chi_for(n):
@@ -41,7 +45,7 @@ if os.path.exists(OUT):
         results = json.load(f)
     results['sizes'] = {int(k): v for k, v in results['sizes'].items()}
 else:
-    results = {'experiment': f'137b_crossover_q{q}', 'sprint': 137, 'q': q, 'g_c': g_c,
+    results = {'experiment': f'{SPRINT}b_crossover_q{q}', 'sprint': SPRINT, 'q': q, 'g_c': g_c,
                'xi_d_exact': XI, 'BC': 'open', 'method': 'zq_dmrg_hyperbola_fit', 'sizes': {}}
 
 
@@ -163,14 +167,14 @@ def measure(n):
     print(f" n={n:2d} L/xi={rec['L_over_xi']:.2f}  g*={gs:.5f}  Dm={dm:.6f} (Dm*L={dm*n:.3f})  "
           f"c1={c1:.3f}  Im(g_EP)={im:.6f}  relres={relres:.1e}  "
           f"[{nsolve} solves, chi {cu_max}/{chi}, {dt:.0f}s]", flush=True)
-    record(sprint=137, model='sq_potts', q=q, n=n, quantity='im_gEP_open', value=float(im),
+    record(sprint=SPRINT, model='sq_potts', q=q, n=n, quantity='im_gEP_open', value=float(im),
            error=float(im * np.hypot(perr[0] / dm, perr[1] / c1)),
            method='thermal_gap_EP_hyperbola_dmrg_open',
            notes=f'g*={gs:.5f} Dm={dm:.6f} c1={c1:.3f} chi={cu_max} relres={relres:.1e}')
-    record(sprint=137, model='sq_potts', q=q, n=n, quantity='thermal_gap_min_open',
+    record(sprint=SPRINT, model='sq_potts', q=q, n=n, quantity='thermal_gap_min_open',
            value=float(dm), error=float(perr[0]), method='hyperbola_fit_dmrg_open',
            notes=f'g*={gs:.5f}; L/xi={rec["L_over_xi"]:.2f}' if XI else None)
-    record(sprint=137, model='sq_potts', q=q, n=n, quantity='gstar_thermal_open',
+    record(sprint=SPRINT, model='sq_potts', q=q, n=n, quantity='gstar_thermal_open',
            value=float(gs), error=None, method='hyperbola_fit_dmrg_open',
            notes='pseudo-critical (charge-0 gap min), open BC')
     save()

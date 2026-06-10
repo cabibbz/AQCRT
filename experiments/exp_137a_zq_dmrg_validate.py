@@ -21,9 +21,11 @@ from db_utils import record
 
 q = int(sys.argv[1]) if len(sys.argv) > 1 else 8
 g_c = 1.0 / q
-SIZES = {6: [7, 8], 8: [6, 7], 10: [5, 6]}.get(q, [5, 6])
+SIZES = {6: [7, 8], 7: [6, 7], 8: [6, 7], 10: [5, 6]}.get(q, [5, 6])
 CHI = 64
-OUT = os.path.join(os.path.dirname(__file__), '..', 'results', f'sprint_137a_validate_q{q}.json')
+SPRINT = int(os.environ.get('SPRINT_NO', 137))     # generic harness; later sprints override
+OUT = os.path.join(os.path.dirname(__file__), '..', 'results',
+                   f'sprint_{SPRINT}a_validate_q{q}.json')
 
 
 def build_open_parts(n):
@@ -40,7 +42,7 @@ def build_open_parts(n):
     return Hc, Hf, P
 
 
-res = {'experiment': f'137a_zq_dmrg_validate_q{q}', 'sprint': 137, 'q': q, 'g_c': g_c,
+res = {'experiment': f'{SPRINT}a_zq_dmrg_validate_q{q}', 'sprint': SPRINT, 'q': q, 'g_c': g_c,
        'BC': 'open', 'chi_max': CHI, 'cases': []}
 print("=" * 78)
 print(f"Sprint 137a: Z_q-conserving DMRG vs open-BC ED, q={q}, sizes={SIZES}, chi={CHI}")
@@ -83,7 +85,7 @@ res['all_pass'] = all(c['pass'] for c in res['cases'])
 res['timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S')
 with open(OUT, 'w') as f:
     json.dump(res, f, indent=2)
-record(sprint=137, model='sq_potts', q=q, n=max(SIZES), quantity='zq_dmrg_validation_worst_rel',
+record(sprint=SPRINT, model='sq_potts', q=q, n=max(SIZES), quantity='zq_dmrg_validation_worst_rel',
        value=worst, error=None, method='dmrg_vs_ed_charge0_gap_open',
        notes=f'chi={CHI}; {len(res["cases"])} cases (E0,E1,gap); all_pass={res["all_pass"]}')
 print(f"\n{'ALL PASS' if res['all_pass'] else '*** FAILURES ***'}  worst rel diff = {worst:.2e}")
