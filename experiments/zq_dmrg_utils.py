@@ -70,7 +70,12 @@ def dmrg_state(n, q, g, chi_max, J=1.0, init=None, orthogonal_to=None,
         psi = init.copy()
     opts = {'mixer': True, 'max_E_err': 1e-11, 'max_S_err': 1e-8,
             'trunc_params': {'chi_max': chi_max, 'svd_min': svd_min},
-            'min_sweeps': min_sweeps, 'max_sweeps': max_sweeps}
+            'min_sweeps': min_sweeps, 'max_sweeps': max_sweeps,
+            # tenpy's default hard-error at trunc_err>1e-4 kills q=10 excited-state runs
+            # at chi=64; gap accuracy at that truncation is ED-validated (rel ~3e-4,
+            # exp_137a) and far below the slope signals. Disable the hard error; final
+            # chi-upgrade spot check in exp_137c/sprint report guards the conclusion.
+            'max_trunc_err': None}
     if orthogonal_to and init is None:
         # seed differently from psi0 (all-0) or DMRG can stall in the orthogonal complement:
         # |1, q-1, 0, ...> has total charge q = 0 mod q
