@@ -1,50 +1,51 @@
 # Current State -- Rewrite this completely each sprint
 
 ## Last Sprint
-**Sprint 138 — Λ ∝ ξ PREDICTION CONFIRMED at q=7 (blind/out-of-sample).** sprints/sprint_138.md
-(+unpublished/). Registered BEFORE data: Λ_Im = 79±5 (=1.65ξ, from S137's q=8,10 coefficients),
-Λ_Dm = 126±7. Measured (n=8..40, ED-validated 1.1e-6, every size ≥7 fit points):
-- **Λ_Im = 79 ± 25 (1.64ξ) — dead center; Λ_Dm = 118 ± 24 (0.3σ).** Decay term independently
-  demanded: dAIC +13.0 (Δm) / +7.0 (Im); with Λ FIXED at the prediction (zero extra params)
-  it still beats pure power by +14.9/+9.0. Matched-window q=8 calibration: +12.5 vs q=7's +13.0.
-- Λ_Dm/Λ_Im = 1.50 (q=8: 1.58, q=10: 1.59). All 3 pre-registered falsifiers evaded.
-- **The law Λ_Im ≈ 1.65 ξ_d now spans q=7,8,10 (ξ 10.6→48.1, 4.6x) with q=7 earned blind.**
-  S137's POTENTIALLY NOVEL upgraded to CONFIRMED (hardening #1,#2,#3 satisfied).
+**Sprint 139 — INTERFACE-TENSION TEST: σ̃·ξ_d = 1/4 (= σ_od/2), naive duality EXCLUDED.**
+sprints/sprint_139.md (+unpublished/). Extended q=10 to n=32,36 (L/ξ=3.4; n=36 fit relres
+3.8e-4). Joint fit ln Δm = lnA_q − a lnL − (s/ξ_q)L over q=6,7,8,10 (32 pts, ξ lever 15x):
+- **s = 1/2 (classical Borgs–Janke duality σ_od·ξ_d=1/2 transferring naively) EXCLUDED:**
+  dAIC +135 joint, +16.8 q=10-tail-only; local rate σ_loc·ξ FLATTENS at 0.23–0.27 over
+  L/ξ=2.5–3.4 (H_dual demands 0.51–0.55). s=0 (no decay) excluded too (+141).
+- **q=10 tail: s = 0.213±0.035; s≡1/4 fits as well as free (dAIC −0.1).** Reading: the gap is
+  a tunneling AMPLITUDE ⇒ Δ_min ~ (1/L)·e^{−σ_od L/2} with the EXACT 2σ_od=1/ξ_d ⇒ σ̃ξ=1/4 ✓.
+  Caveat flagged: τ-continuum anisotropy/velocity factor not independently fixed (queued).
+- Reconciliation: S137/138's Λ_Dm≈2.5–2.7ξ (s≈0.40) is the crossover-ONSET law (what the blind
+  q=7 prediction tested — still stands); the ASYMPTOTIC constant is 1/4 (Λ_∞ = 4ξ).
+- Arc complete: estimator (S136) → crossover + null control (S137) → blind Λ∝ξ prediction
+  (S138) → exact-anchored asymptotic constant (S139).
 
 ## CRITICAL: standing framework (audit-hedged wording — keep)
 - χ_F null = 2/ν−d (proven, golden-gated); q=4 collapse 1/ν=1.45-1.49 consistent w/ exact 2/3.
-- q=4 marginal-log: q4-vs-q3 deficit CONTRAST is the datum; EP and χ_F NOT independent
-  (χ_F·Im²≈const). S135 chi=48 values PROVEN converged (S137d).
-- Walking: shadow exponent = Re(1/ν_complex) holds ONLY at q=5 (S137 CG). q≥7: the real
-  crossover, **Λ_Im ≈ 1.65 ξ_d (CONFIRMED S138)**; q=6 ED/DMRG values are crossover-mixed.
+- q=4 marginal-log: q4-vs-q3 deficit CONTRAST is the datum; EP & χ_F NOT independent.
+- Walking: shadow exponents valid ONLY at q=5 (S137 CG). Crossover onset Λ_Im≈1.65ξ_d
+  (CONFIRMED blind, S138); asymptotic gap decay σ̃=1/(4ξ_d)=σ_od/2 (S139, q=10).
 
 ## Active Research Thread
-Thermal-gap EP walking crossover — law confirmed. Natural continuations below; also consider a
-PIVOT (thread is mature; the EP toolkit + Z_q DMRG are reusable for new questions).
+Walking/EP arc is COMPLETE and publication-shaped. Strong pivot candidate; or close remaining
+loose ends below.
 
 ## QPU Budget
 580s remaining -- BLOCKED (~/.qiskit/qiskit-ibm.json empty; needs human). Log predictions only.
 
 ## Top 3 Next Experiments
-1. **Interface-tension identity:** for L≫ξ, Δ_min ~ e^{−σL}; test σ vs the exact 2D Potts
-   interface tension via σ·ξ ~ O(1): we have 1/Λ_Dm = σ_eff at q=7/8/10 → check σ_eff·ξ_d =
-   1/2.46, 1/2.51, 1/2.71 ≈ 0.40, 0.40, 0.37 — already suspiciously constant! Formalize vs
-   literature duality relation (σ(q)ξ_d(q) known exactly?) — cheap, analysis-only sprint.
-2. **Write-up sprint:** S136-138 form a complete, publishable arc (EP estimator → crossover →
-   confirmed Λ∝ξ law + q=5 shadow anchor). Draft a paper-style summary in unpublished/.
-3. **q=5 deep-shadow precision:** ξ=2512 ⇒ pure shadow to any reachable L; high-precision
-   1/ν_eff(q=5) via the S137 hyperbola method to n≈40 → sharpest test of Re(1/ν_complex)=1.534
-   (S136 ED gave 1.505 at n≤9; DMRG can halve the undershoot).
+1. **Velocity v(q=10) measurement** to close the S139 anisotropy caveat: disordered-phase
+   dispersion (single charge-1 magnon: E(k) from twisted-BC ED or DMRG momentum states) at the
+   transition → dimensionless σ̃ξ/v vs 1/4. Cheap (ED q=10 n≤6 + small DMRG).
+2. **Write-up sprint: the S136–S139 arc as a paper draft** in unpublished/ (EP estimator,
+   validation, crossover + null control, blind Λ∝ξ prediction, σ_od/2 asymptotics). All data
+   and DB rows exist; pure writing + 2-3 summary figures (matplotlib).
+3. **σ̃ universality check at q=8:** extend q=8 to n=44,48 (L/ξ≈1.8-2.0; ~3-4h each) to verify
+   the σ_loc plateau → 1/4 sets in at the SAME L/ξ as q=10 — tests the scaling form, not just
+   the constant. (Optional; q=10 already carries the claim.)
 
 ## Ruled Out / Retracted (recent)
-- "Shadow" language for q≥6 effective exponents (S137); symmetric crossing fits on open chains;
-  <7-point hyperbola fits (fake precision); "ξ>12" anchors (use exact ξ_d table in KNOWLEDGE).
-- exp scripts have NO __main__ guard — NEVER import one (it executes; bit the audit twice).
+- Naive duality transfer σ̃ξ=1/2 (S139); "ξ/Λ≈0.40 is asymptotic" (it is the onset value).
+- Shadow language for q≥6 effective exponents; <7-point hyperbola fits; importing exp scripts.
 
 ## Key Tools
-zq_dmrg_utils (Z_q-conserving DMRG; orthogonal_to = CONSTRUCTOR kwarg in TeNPy 1.1).
-exp_137a/b = generic validate/production harnesses, SPRINT_NO env sets provenance (S138 used
-this; JSON name + DB sprint follow). exp_138a (prediction-test analysis). exp_137c (AIC/CG).
-ep_utils (periodic ED EP, golden-gated). Gates: test_golden 18 checks + db_check A/B/D,
-pre+post via loop.sh. python = system Python311; CuPy PINNED 13.6.0. Costs: q=7 n=40 chi=128
-size ≈ 110 min (34 solves); full q sweep n=8..40 ≈ 6.5 h.
+zq_dmrg_utils (Z_q DMRG; orthogonal_to = constructor kwarg). exp_137a/b harnesses w/ SPRINT_NO
+provenance env. exp_139a (joint interface-tension fit). exp_138a (Λ prediction test). exp_137c
+(AIC/CG). ep_utils (golden-gated). Gates: test_golden 18 + db_check A/B/D, pre+post via
+loop.sh. python = system Python311; CuPy PINNED 13.6.0. Costs: q=10 n=32/36 chi=128 ≈ 3.2h
+each (34 solves). JSON accumulate files merge-on-save; same-q parallel runs still discouraged.

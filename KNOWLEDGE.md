@@ -20,9 +20,13 @@ claims — hedges are inline below; full audit report: sprints/audit_2026-06-09.
   Λ_Im=79±5 / Λ_Dm=126±7; measured 79±25 / 118±24, decay independently demanded (dAIC +13/+7),
   fixed-at-prediction fit beats pure power with zero free Λ (+14.9/+9.0). Λ_Im≈1.65ξ_d spans
   q=7,8,10 (ξ 4.6x range) with the q=7 point earned blind.
-- **Interface-tension identity (new, from S138):** σ_eff·ξ_d = ξ/Λ_Dm = 0.41, 0.40, 0.37 at
-  q=7/8/10 — suspiciously constant; check vs exact 2D Potts interface-tension/ξ duality
-  (analysis-only sprint).
+- **~~Interface-tension identity~~ RESOLVED (Sprint 139):** the 0.40 was the crossover-ONSET
+  value; the ASYMPTOTIC decay rate (q=10 to L/ξ=3.4) is **σ̃·ξ_d = 1/4 = σ_od·ξ_d/2** —
+  naive duality transfer (1/2) excluded dAIC +17(tail)/+135(joint); s≡1/4 AIC-equivalent to
+  free. Reading: gap = tunneling amplitude ⇒ Δ ~ (1/L)e^{−σ_od L/2}, σ_od exact (Borgs-Janke
+  2σ_od=1/ξ_d). Caveat: velocity/anisotropy factor not independently fixed → next item.
+- **Velocity v(q=10)** (closes the S139 caveat): measure the disordered-phase dispersion at the
+  transition → dimensionless σ̃ξ/v vs 1/4.
 
 ## Five Entanglement Archetypes
 | Archetype | Example | MI pattern | I3 sign | Negativity | Source |
@@ -69,6 +73,10 @@ canonical: `sq_potts`, `hybrid`, `hybrid_2d` (migrated 2026-06-09; db_utils cano
 - **Walking q=5,6,7 (S137-resolved):** S136's effective 1/ν_eff = 1.51/1.65/1.78. The S137
   Coulomb-gas comparison shows q=5 matches Re(1/ν_complex)=1.534 (genuine shadow; ξ≈2500) while
   q=6,7 already exceed theirs (1.563/1.588) — crossover-contaminated even at L/ξ ~ 0.05-0.15.
+- **S139 — asymptotic gap decay = HALF the exact classical interface tension (q=10, L/ξ≤3.4):**
+  σ_loc·ξ flattens at 0.23–0.27; tail fit s=0.213±0.035; s≡1/4 parsimony-preferred; s≡1/2
+  excluded (+16.8). Δ_min ~ (1/L)·e^{−σ_od L/2} with exact 2σ_od=1/ξ_d (Borgs–Janke). The
+  S137/138 Λ∝ξ law = onset regime (s_eff≈0.40); asymptotic Λ_∞(Dm)=4ξ. unpublished/sprint_139.md.
 - **S138 — Λ ∝ ξ CONFIRMED by blind prediction (q=7):** the S137 coefficients predicted
   Λ_Im=79±5 BEFORE any q=7 data; measurement returned 79±25 (1.64ξ vs predicted 1.65ξ) with
   the decay term independently demanded at the q=8-calibrated strength. Λ_Dm/Λ_Im = 1.50
