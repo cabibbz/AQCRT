@@ -124,3 +124,15 @@ a validated estimator, the observed crossover with a null control, a blind-predi
 - Buffenoir & Wallon (1993): exact ξ_d(q) at the transition.
 - Campostrini, Nespolo, Pelissetto, Vicari (1410.8662): FSS at first-order quantum Potts
   transitions (exponential gap closing, BC dependence).
+
+---
+
+## ADDENDUM (Sprint 140, 2026-06-11) — interpretation DOWNGRADED
+The velocity test (sprints/sprint_140.md) measured the quantum chain's own disordered-branch
+correlation length: xi_x(q=10, at g_c) <= 4.3 sites (2.2 at the nearest clean coupling) --
+NOT ~xi_d^cl=10.6 (amplitude reading) and NOT ~2 xi_d^cl (rescaled-duality reading). The
+"gap = amplitude => sigma = sigma_od/2" interpretation in this report compared per-site and
+per-classical-unit quantities WITHOUT a shared length normalization and is hereby downgraded
+to an open question. The MEASURED facts of this sprint (sigma_loc flattening at 0.23-0.27/xi_d^cl;
+s=1/2 with xi_d^cl excluded; s==1/4 with xi_d^cl AIC-preferred) stand unchanged. Decisive next
+test: does sigma(q=8)*xi_d^cl(8) = 1/4 recur? (asymptotic q=8 tail, queued).

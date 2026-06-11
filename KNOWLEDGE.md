@@ -25,8 +25,18 @@ claims — hedges are inline below; full audit report: sprints/audit_2026-06-09.
   naive duality transfer (1/2) excluded dAIC +17(tail)/+135(joint); s≡1/4 AIC-equivalent to
   free. Reading: gap = tunneling amplitude ⇒ Δ ~ (1/L)e^{−σ_od L/2}, σ_od exact (Borgs-Janke
   2σ_od=1/ξ_d). Caveat: velocity/anisotropy factor not independently fixed → next item.
-- **Velocity v(q=10)** (closes the S139 caveat): measure the disordered-phase dispersion at the
-  transition → dimensionless σ̃ξ/v vs 1/4.
+- **~~Velocity v(q=10)~~ DONE (Sprint 140) — BOTH readings refuted; S139 interpretation
+  downgraded.** Direct ξ_x(q=10 at g_c) ≲ 4.3 sites (OZ correlator, size-converged) — not
+  ξ_d^cl=10.6 (amplitude reading) nor 21 (rescaled duality). σ̃·ξ_x = 0.05-0.10, no special
+  value. **σ̃ = σ_od^cl/2 stands as an unexplained numerical identity at ONE q.** New puzzle:
+  TWO decoupled lengths at the quantum first-order point (microscopic ξ_x = 2-4 sites vs
+  tunneling Λ ≈ 17 sites ∝ classical ξ_d) — classically locked by duality+wetting, quantum-side not.
+- **q=8 asymptotic universality check — THE decisive open test:** does σ̃(q=8)·ξ_d^cl(8) = 1/4
+  recur? (tail n=44-52). Registered prediction under "law": plateau 0.25±0.04 by L/ξ≈2.
+  If yes: a law of the quantum-classical coexistence correspondence (theory needed). If no:
+  S139's 1/4 was accidental.
+- **ξ_x(q) mini-survey** (cheap): exp_140a at q=7,8 — is ξ_x ∝ ξ_d^cl with a small coefficient,
+  or q-flat? Distinguishes uniform compression vs genuine decoupling.
 
 ## Five Entanglement Archetypes
 | Archetype | Example | MI pattern | I3 sign | Negativity | Source |
@@ -73,10 +83,16 @@ canonical: `sq_potts`, `hybrid`, `hybrid_2d` (migrated 2026-06-09; db_utils cano
 - **Walking q=5,6,7 (S137-resolved):** S136's effective 1/ν_eff = 1.51/1.65/1.78. The S137
   Coulomb-gas comparison shows q=5 matches Re(1/ν_complex)=1.534 (genuine shadow; ξ≈2500) while
   q=6,7 already exceed theirs (1.563/1.588) — crossover-contaminated even at L/ξ ~ 0.05-0.15.
-- **S139 — asymptotic gap decay = HALF the exact classical interface tension (q=10, L/ξ≤3.4):**
-  σ_loc·ξ flattens at 0.23–0.27; tail fit s=0.213±0.035; s≡1/4 parsimony-preferred; s≡1/2
-  excluded (+16.8). Δ_min ~ (1/L)·e^{−σ_od L/2} with exact 2σ_od=1/ξ_d (Borgs–Janke). The
-  S137/138 Λ∝ξ law = onset regime (s_eff≈0.40); asymptotic Λ_∞(Dm)=4ξ. unresolved/sprint_139.md.
+- **S139 — asymptotic gap decay σ̃·ξ_d^cl = 1/4 at q=10 (MEASURED; interpretation OPEN per
+  S140):** σ_loc·ξ_d^cl flattens at 0.23–0.27; tail s=0.213±0.035; s≡1/4 parsimony-preferred;
+  s≡1/2 excluded (+16.8). The "amplitude ⇒ σ_od/2" reading was units-blind (S140 addendum):
+  the numerical identity σ̃=0.02367 vs σ_od^cl/2=0.02368 is unexplained, one-q. The S137/138
+  Λ∝ξ law = onset regime; asymptotic Λ_∞(Dm)=4ξ_d^cl. unresolved/sprint_139.md.
+- **S140 — two-length structure at the quantum first-order point:** ξ_x(q=10, disordered
+  branch, at g_c) ≲ 4.3 sites (direct OZ correlator, n=48/64 converged; 2.2 at g_c+0.003)
+  vs tunneling scale Λ ≈ 17 sites ∝ ξ_d^cl. METHOD: near coexistence use exact charge BLOCKS
+  (Fourier basis) — plain ⟨P⟩ filtering fails (Lanczos tower mixing); flat magnon bands make
+  ξ=v/Δ unreliable (use the correlator). unresolved/sprint_140.md.
 - **S138 — Λ ∝ ξ CONFIRMED by blind prediction (q=7):** the S137 coefficients predicted
   Λ_Im=79±5 BEFORE any q=7 data; measurement returned 79±25 (1.64ξ vs predicted 1.65ξ) with
   the decay term independently demanded at the q=8-calibrated strength. Λ_Dm/Λ_Im = 1.50
