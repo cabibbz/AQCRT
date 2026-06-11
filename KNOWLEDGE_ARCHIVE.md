@@ -651,7 +651,7 @@ kappa_onpeak ASCENDS 1.683→1.761 toward 2.0 while kappa_fixed descends 1.86→
 behavior, so a descending fixed-g_c kappa is NOT evidence of a sub-null asymptote. The S132 datum
 chi_F(n=12 periodic, g_c)=93.747642 and S133 chi_F_open_exact series stand as DATA; only the
 effective-exponent interpretation changed. POTENTIALLY NOVEL (modest): the opposite fixed↓/peak↑
-drift manufacturing an apparent wrong-sign tension. unpublished/sprint_134.md.
+drift manufacturing an apparent wrong-sign tension. unresolved/sprint_134.md.
 
 ### q=4 chi_F marginal-operator log analysis, open on-peak to n=24 via DMRG (Sprint 135)
 TeNPy DMRG (OPEN BC), real-dtype S_q ops; chi=48 converges chi_F to 1e-6 at n=12 (chiconv);

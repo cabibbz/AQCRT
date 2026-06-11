@@ -162,7 +162,7 @@ theoretical 2 (ν=2/3 + Albuquerque). The robust claim is the *trend direction*,
 synthetic-recovery proof the diagnostic is non-circular and (ii) a q=3 null-convergence control showing
 q=3 descends onto its null while q=4 descends away from its.
 **Extends:** the χ_F-q=4 "no prior log measurement" novelty (S128/129) with the first sub-CPU-wall data
-point and a non-circular trend diagnostic. Copied to `unpublished/sprint_132.md`.
+point and a non-circular trend diagnostic. Copied to `unresolved/sprint_132.md`.
 
 ## Files
 - experiments/exp_132a_gpu_validation.py, exp_132b_q4_n12_frontier.py,

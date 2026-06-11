@@ -129,7 +129,7 @@ last open rigor item is closed.
 quantum-chain (1+1D) observable, of the walking → first-order crossover of the thermal-gap
 exceptional point: Im(g_EP)(L) (and Δ_min(L)) leave the conformal-shadow power law on the scale
 Λ ∝ ξ_d (exact), with a null control at q=6 and the shadow regime quantitatively anchored to the
-complex-CFT exponent at q=5. Copied to unpublished/.
+complex-CFT exponent at q=5. Copied to unresolved/.
 
 ## Conclusion
 The audit-retargeted run worked exactly as designed: at q=8 and q=10 — where the exact

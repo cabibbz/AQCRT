@@ -2,7 +2,7 @@
 
 ## Last Sprint
 **Sprint 139 — INTERFACE-TENSION TEST: σ̃·ξ_d = 1/4 (= σ_od/2), naive duality EXCLUDED.**
-sprints/sprint_139.md (+unpublished/). Extended q=10 to n=32,36 (L/ξ=3.4; n=36 fit relres
+sprints/sprint_139.md (+unresolved/). Extended q=10 to n=32,36 (L/ξ=3.4; n=36 fit relres
 3.8e-4). Joint fit ln Δm = lnA_q − a lnL − (s/ξ_q)L over q=6,7,8,10 (32 pts, ξ lever 15x):
 - **s = 1/2 (classical Borgs–Janke duality σ_od·ξ_d=1/2 transferring naively) EXCLUDED:**
   dAIC +135 joint, +16.8 q=10-tail-only; local rate σ_loc·ξ FLATTENS at 0.23–0.27 over
@@ -32,7 +32,7 @@ loose ends below.
 1. **Velocity v(q=10) measurement** to close the S139 anisotropy caveat: disordered-phase
    dispersion (single charge-1 magnon: E(k) from twisted-BC ED or DMRG momentum states) at the
    transition → dimensionless σ̃ξ/v vs 1/4. Cheap (ED q=10 n≤6 + small DMRG).
-2. **Write-up sprint: the S136–S139 arc as a paper draft** in unpublished/ (EP estimator,
+2. **Write-up sprint: the S136–S139 arc as a paper draft** in unresolved/ (EP estimator,
    validation, crossover + null control, blind Λ∝ξ prediction, σ_od/2 asymptotics). All data
    and DB rows exist; pure writing + 2-3 summary figures (matplotlib).
 3. **σ̃ universality check at q=8:** extend q=8 to n=44,48 (L/ξ≈1.8-2.0; ~3-4h each) to verify

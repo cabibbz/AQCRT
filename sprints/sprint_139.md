@@ -101,7 +101,7 @@ rate of the transverse-field Potts chain at its first-order transition, σ̃·ξ
 classical order–disorder interface tension — consistent with amplitude-level interface
 suppression. No prior quantum-chain measurement of this constant found (CNPV 1410.8662
 established the exponential closing; the σ_od/2 identification vs the exact Borgs–Janke value
-appears new). Copied to unpublished/.
+appears new). Copied to unresolved/.
 
 ## Conclusion
 The S138 bonus observation is resolved: the near-constant ξ/Λ_Dm ≈ 0.40 was the crossover-onset

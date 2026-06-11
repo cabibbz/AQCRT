@@ -83,7 +83,7 @@ thermal-gap EP observables scales with the exact classical correlation length, �
 demonstrated by a successful parameter-free out-of-sample prediction at q=7. The S137+S138
 package (crossover + null control + predicted interpolation) satisfies novelty-hardening rules
 #1 (5+ data points), #2 (two series: Δm and Im), #3 (falsification test passed as a registered
-prediction). Copied to unpublished/.
+prediction). Copied to unresolved/.
 
 ## Conclusion
 S137's Λ ∝ ξ scaling made a sharp, registered prediction for q=7 — Λ_Im = 79 ± 5 — and the

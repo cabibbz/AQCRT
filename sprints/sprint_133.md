@@ -157,7 +157,7 @@ n=12), measured by canonical exact diagonalization and cross-confirmed in drift 
 Combined with the periodic descent, this reconciles the two boundary conditions as one non-monotonic
 finite-size flow and removes the prior "wrong-sign-vs-2.0" tension. Literature search found no prior
 report of a non-monotonic fidelity-susceptibility effective exponent, nor an open/periodic χ_F reconciliation,
-for the 4-state Potts chain. Copied to unpublished/.
+for the 4-state Potts chain. Copied to unresolved/.
 
 ## Files
 - `experiments/exp_133a_bc_canonical_q4.py`, `experiments/exp_133b_bc_reconcile.py`

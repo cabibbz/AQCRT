@@ -125,7 +125,7 @@ exponent 1/ν for the transverse-field S_q Potts chain — Im(g_EP)=√(Δ_min/�
 validated to recover exact 1/ν at q=2 (1.0) and q=3 (1.2), giving an INDEPENDENT (non-χ_F) confirmation of
 the q=4 marginal-operator log (1/ν_eff climbs to 1.5 from below), and mapping a smooth 1/ν_eff(q) across
 the q=4 continuous→walking boundary (the complex-CFT conformal shadow). No prior quantum-chain EP
-measurement of this was found. Copied to unpublished/.
+measurement of this was found. Copied to unresolved/.
 
 ### What this sprint does and does NOT establish
 - **DOES:** introduce + validate (vs exact ν at q=2,3, and vs a true complex-g diagonalization at q=2) a

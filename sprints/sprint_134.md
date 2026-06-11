@@ -157,5 +157,5 @@ standard FSS (Albuquerque uses the peak); no paper reports the q=4 opposite-drif
 - **POTENTIALLY NOVEL (modest, methodological):** at the marginal 4-state Potts point the fixed-critical-
   coupling χ_F effective exponent and the peak-height effective exponent drift in OPPOSITE directions
   (fixed↓, peak↑) toward a common 2/ν−d; the opposite drift is what manufactured an apparent
-  wrong-sign/non-monotonic tension. No prior report found. Copied to unpublished/.
+  wrong-sign/non-monotonic tension. No prior report found. Copied to unresolved/.
 

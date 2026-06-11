@@ -32,7 +32,7 @@ thermal-gap exceptional-point estimator of 1/ν. See `STATE.md` for current posi
 - `results.db` — Queryable database of key measurements
 - `sprints/` — Individual sprint reports
 - `results/` — Raw experiment data (JSON)
-- `unpublished/` — Reports flagged POTENTIALLY NOVEL (note: this repo is public — the directory
+- `unresolved/` — Reports flagged POTENTIALLY NOVEL (note: this repo is public — the directory
   gives timestamped priority, not embargo)
 
 ## Quick start

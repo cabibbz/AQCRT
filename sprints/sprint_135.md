@@ -151,7 +151,7 @@ logarithmic correction in the fidelity susceptibility of the quantum chain, isol
 (s≈−1.2) at q=4, with q=4 consistent with the proven 2/ν−d=2.0. Cardy/Hamer established this 1/ln L
 structure for the energy/magnetic GAPS of this model; a χ_F measurement of it was not found in the
 literature. Extends S134 (which fixed the on-peak observable and the flow direction) with large-L DMRG data
-and a controlled log detection. Copied to unpublished/.
+and a controlled log detection. Copied to unresolved/.
 
 ### What this sprint does and does NOT establish
 - **DOES:** open on-peak κ_eff ascends monotonically 0.66→1.49 over n=4→24 (no plateau, no turnover);

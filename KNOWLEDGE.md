@@ -76,12 +76,12 @@ canonical: `sq_potts`, `hybrid`, `hybrid_2d` (migrated 2026-06-09; db_utils cano
 - **S139 — asymptotic gap decay = HALF the exact classical interface tension (q=10, L/ξ≤3.4):**
   σ_loc·ξ flattens at 0.23–0.27; tail fit s=0.213±0.035; s≡1/4 parsimony-preferred; s≡1/2
   excluded (+16.8). Δ_min ~ (1/L)·e^{−σ_od L/2} with exact 2σ_od=1/ξ_d (Borgs–Janke). The
-  S137/138 Λ∝ξ law = onset regime (s_eff≈0.40); asymptotic Λ_∞(Dm)=4ξ. unpublished/sprint_139.md.
+  S137/138 Λ∝ξ law = onset regime (s_eff≈0.40); asymptotic Λ_∞(Dm)=4ξ. unresolved/sprint_139.md.
 - **S138 — Λ ∝ ξ CONFIRMED by blind prediction (q=7):** the S137 coefficients predicted
   Λ_Im=79±5 BEFORE any q=7 data; measurement returned 79±25 (1.64ξ vs predicted 1.65ξ) with
   the decay term independently demanded at the q=8-calibrated strength. Λ_Dm/Λ_Im = 1.50
-  (vs 1.58/1.59). Upgrades S137 to CONFIRMED NOVEL (hardening #1-#3). unpublished/sprint_138.md.
-- **S137 — WALKING CROSSOVER OBSERVED (strongest result to date; unpublished/sprint_137.md):**
+  (vs 1.58/1.59). Upgrades S137 to CONFIRMED NOVEL (hardening #1-#3). unresolved/sprint_138.md.
+- **S137 — WALKING CROSSOVER OBSERVED (strongest result to date; unresolved/sprint_137.md):**
   Z_q-charge-conserving DMRG (zq_dmrg_utils, ED-validated 3e-4) extends the thermal-gap EP to
   n=28 at q=8,10. Both Im(g_EP)(L)=Δm/c1 (asymmetric avoided-crossing fit) and Δ_min(L) demand
   an exponential factor beyond the shadow power law exactly where L crosses the EXACT ξ_d:
