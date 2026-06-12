@@ -31,10 +31,15 @@ claims — hedges are inline below; full audit report: sprints/audit_2026-06-09.
   value. **σ̃ = σ_od^cl/2 stands as an unexplained numerical identity at ONE q.** New puzzle:
   TWO decoupled lengths at the quantum first-order point (microscopic ξ_x = 2-4 sites vs
   tunneling Λ ≈ 17 sites ∝ classical ξ_d) — classically locked by duality+wetting, quantum-side not.
-- **q=8 asymptotic universality check — THE decisive open test:** does σ̃(q=8)·ξ_d^cl(8) = 1/4
-  recur? (tail n=44-52). Registered prediction under "law": plateau 0.25±0.04 by L/ξ≈2.
-  If yes: a law of the quantum-classical coexistence correspondence (theory needed). If no:
-  S139's 1/4 was accidental.
+- **~~q=8 universality check~~ DONE (Sprint 141) — THE CONSTANT RECURS. Law, not numerology.**
+  Plateau means: q=8 (L/ξ≥1.3) = 0.256 vs q=10 (L/ξ≥2) = 0.259 — same to 1% across ξ 2.26x;
+  joint shared-s tail fit = 0.213±0.029 (1/4 in 1.3σ; 0.40 out 6.4σ; 0.50 out 9.9σ).
+  q=8-only fit underpowered (admitted). Whether the shared constant is EXACTLY 1/4 is open;
+  q-independence + scale established. **Standing theory puzzle:** quantum tunneling rate =
+  half the exact classical Borgs-Janke tension per CLASSICAL ξ_d, mechanism unknown
+  (amplitude/naive duality both removed S139/S140; quantum ξ_x decoupled).
+- **Theory probe (next):** measure the quantum chain's OWN order-disorder interface free
+  energy directly (fixed-BC DMRG energy excess) → compare σ_interface^quantum vs σ̃ vs σ_od^cl.
 - **ξ_x(q) mini-survey** (cheap): exp_140a at q=7,8 — is ξ_x ∝ ξ_d^cl with a small coefficient,
   or q-flat? Distinguishes uniform compression vs genuine decoupling.
 
@@ -88,6 +93,10 @@ canonical: `sq_potts`, `hybrid`, `hybrid_2d` (migrated 2026-06-09; db_utils cano
   s≡1/2 excluded (+16.8). The "amplitude ⇒ σ_od/2" reading was units-blind (S140 addendum):
   the numerical identity σ̃=0.02367 vs σ_od^cl/2=0.02368 is unexplained, one-q. The S137/138
   Λ∝ξ law = onset regime; asymptotic Λ_∞(Dm)=4ξ_d^cl. unresolved/sprint_139.md.
+- **S141 — σ̃·ξ_d^cl ≈ 1/4 is q-INDEPENDENT (q=8 + q=10):** registered P1 passed (plateau
+  0.256 vs 0.259, 1% match across ξ 2.26x; L/ξ≈2 window 0.277 ∈ 0.25±0.04); joint shared-s
+  = 0.213±0.029 excludes 0.40/0.50 at 6-10σ. The constant's exact value (1/4 vs 0.21-0.25)
+  open; its universality established. unresolved/sprint_141.md.
 - **S140 — two-length structure at the quantum first-order point:** ξ_x(q=10, disordered
   branch, at g_c) ≲ 4.3 sites (direct OZ correlator, n=48/64 converged; 2.2 at g_c+0.003)
   vs tunneling scale Λ ≈ 17 sites ∝ ξ_d^cl. METHOD: near coexistence use exact charge BLOCKS
